@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Fundamentos Estadísticos con R - 3&nbsp; Más Distribuciones y el Teorema del Límite Central</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./correlacion_de.html" rel="next">
+<link href="./summary.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Teorema_LC.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Más Distribuciones y el Teorema del Límite Central</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Fundamentos Estadísticos con R</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Summary (resumen) Estadística</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Números aleatorios y Probabilidad</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Teorema_LC.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Más Distribuciones y el Teorema del Límite Central</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./correlacion_de.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Correlación y Diseño Experimental</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#la-distribución-normal" id="toc-la-distribución-normal" class="nav-link active" data-scroll-target="#la-distribución-normal"><span class="header-section-number">3.1</span> La distribución Normal</a>
+  <ul class="collapse">
+  <li><a href="#descrita-por-media-y-desviación-estándar" id="toc-descrita-por-media-y-desviación-estándar" class="nav-link" data-scroll-target="#descrita-por-media-y-desviación-estándar"><span class="header-section-number">3.1.1</span> Descrita por media y desviación estándar</a></li>
+  <li><a href="#áreas-bajo-la-distribución-normal" id="toc-áreas-bajo-la-distribución-normal" class="nav-link" data-scroll-target="#áreas-bajo-la-distribución-normal"><span class="header-section-number">3.1.2</span> Áreas bajo la distribución normal</a></li>
+  <li><a href="#muchos-histogramas-parecen-normales" id="toc-muchos-histogramas-parecen-normales" class="nav-link" data-scroll-target="#muchos-histogramas-parecen-normales"><span class="header-section-number">3.1.3</span> Muchos histogramas parecen normales</a></li>
+  <li><a href="#aproximación-de-datos-con-la-distribución-normal" id="toc-aproximación-de-datos-con-la-distribución-normal" class="nav-link" data-scroll-target="#aproximación-de-datos-con-la-distribución-normal"><span class="header-section-number">3.1.4</span> Aproximación de datos con la distribución normal</a></li>
+  <li><a href="#qué-porcentaje-de-mujeres-mide-154-157-cm" id="toc-qué-porcentaje-de-mujeres-mide-154-157-cm" class="nav-link" data-scroll-target="#qué-porcentaje-de-mujeres-mide-154-157-cm"><span class="header-section-number">3.1.5</span> ¿Qué porcentaje de mujeres mide 154-157 cm?</a></li>
+  <li><a href="#qué-estatura-es-más-baja-que-el-90-de-las-mujeres" id="toc-qué-estatura-es-más-baja-que-el-90-de-las-mujeres" class="nav-link" data-scroll-target="#qué-estatura-es-más-baja-que-el-90-de-las-mujeres"><span class="header-section-number">3.1.6</span> ¿Qué estatura es más baja que el 90% de las mujeres?</a></li>
+  <li><a href="#qué-altura-es-el-90-de-las-mujeres-más-altas-que" id="toc-qué-altura-es-el-90-de-las-mujeres-más-altas-que" class="nav-link" data-scroll-target="#qué-altura-es-el-90-de-las-mujeres-más-altas-que"><span class="header-section-number">3.1.7</span> ¿Qué altura es el 90% de las mujeres más altas que?</a></li>
+  <li><a href="#generaciones-de-números-aleatorios" id="toc-generaciones-de-números-aleatorios" class="nav-link" data-scroll-target="#generaciones-de-números-aleatorios"><span class="header-section-number">3.1.8</span> Generaciones de números aleatorios</a></li>
+  <li><a href="#ejercicio-14" id="toc-ejercicio-14" class="nav-link" data-scroll-target="#ejercicio-14"><span class="header-section-number">3.1.9</span> Ejercicio 14</a></li>
+  <li><a href="#ejercicio-15" id="toc-ejercicio-15" class="nav-link" data-scroll-target="#ejercicio-15"><span class="header-section-number">3.1.10</span> Ejercicio 15</a></li>
+  <li><a href="#ejercicio-16" id="toc-ejercicio-16" class="nav-link" data-scroll-target="#ejercicio-16"><span class="header-section-number">3.1.11</span> Ejercicio 16</a></li>
+  </ul></li>
+  <li><a href="#teorema-del-límite-central" id="toc-teorema-del-límite-central" class="nav-link" data-scroll-target="#teorema-del-límite-central"><span class="header-section-number">3.2</span> Teorema del Límite Central</a>
+  <ul class="collapse">
+  <li><a href="#tirar-los-dados-5-veces" id="toc-tirar-los-dados-5-veces" class="nav-link" data-scroll-target="#tirar-los-dados-5-veces"><span class="header-section-number">3.2.1</span> Tirar los dados 5 veces</a></li>
+  <li><a href="#distribuciones-muestrales" id="toc-distribuciones-muestrales" class="nav-link" data-scroll-target="#distribuciones-muestrales"><span class="header-section-number">3.2.2</span> Distribuciones Muestrales</a></li>
+  <li><a href="#teorema-del-límite-central-1" id="toc-teorema-del-límite-central-1" class="nav-link" data-scroll-target="#teorema-del-límite-central-1"><span class="header-section-number">3.2.3</span> Teorema del Límite Central</a></li>
+  <li><a href="#distribución-muestral-de-proporciones" id="toc-distribución-muestral-de-proporciones" class="nav-link" data-scroll-target="#distribución-muestral-de-proporciones"><span class="header-section-number">3.2.4</span> Distribución muestral de proporciones</a></li>
+  <li><a href="#media-de-la-distribución-muestral" id="toc-media-de-la-distribución-muestral" class="nav-link" data-scroll-target="#media-de-la-distribución-muestral"><span class="header-section-number">3.2.5</span> Media de la distribución muestral</a></li>
+  <li><a href="#distribución-de-poisson" id="toc-distribución-de-poisson" class="nav-link" data-scroll-target="#distribución-de-poisson"><span class="header-section-number">3.2.6</span> Distribución de Poisson</a></li>
+  <li><a href="#muestreo-a-partir-de-una-distribución-de-poisson" id="toc-muestreo-a-partir-de-una-distribución-de-poisson" class="nav-link" data-scroll-target="#muestreo-a-partir-de-una-distribución-de-poisson"><span class="header-section-number">3.2.7</span> Muestreo a Partir de una distribución de Poisson</a></li>
+  <li><a href="#ejercicio-17" id="toc-ejercicio-17" class="nav-link" data-scroll-target="#ejercicio-17"><span class="header-section-number">3.2.8</span> Ejercicio 17</a></li>
+  <li><a href="#ejercicio-18" id="toc-ejercicio-18" class="nav-link" data-scroll-target="#ejercicio-18"><span class="header-section-number">3.2.9</span> Ejercicio 18</a></li>
+  <li><a href="#mas-distribuciones-de-probabilidad" id="toc-mas-distribuciones-de-probabilidad" class="nav-link" data-scroll-target="#mas-distribuciones-de-probabilidad"><span class="header-section-number">3.2.10</span> Mas distribuciones de Probabilidad</a></li>
+  <li><a href="#probabilidades" id="toc-probabilidades" class="nav-link" data-scroll-target="#probabilidades"><span class="header-section-number">3.2.11</span> Probabilidades</a></li>
+  <li><a href="#valor-esperado-de-la-distribución-exponencial" id="toc-valor-esperado-de-la-distribución-exponencial" class="nav-link" data-scroll-target="#valor-esperado-de-la-distribución-exponencial"><span class="header-section-number">3.2.12</span> Valor esperado de la Distribución Exponencial</a></li>
+  <li><a href="#distribución-t-students" id="toc-distribución-t-students" class="nav-link" data-scroll-target="#distribución-t-students"><span class="header-section-number">3.2.13</span> Distribución t-Students</a></li>
+  <li><a href="#distribución-log-normal" id="toc-distribución-log-normal" class="nav-link" data-scroll-target="#distribución-log-normal"><span class="header-section-number">3.2.14</span> Distribución Log-Normal</a></li>
+  <li><a href="#ejercicio-19" id="toc-ejercicio-19" class="nav-link" data-scroll-target="#ejercicio-19"><span class="header-section-number">3.2.15</span> Ejercicio 19</a></li>
+  <li><a href="#ejercicio-20" id="toc-ejercicio-20" class="nav-link" data-scroll-target="#ejercicio-20"><span class="header-section-number">3.2.16</span> Ejercicio 20</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Más Distribuciones y el Teorema del Límite Central</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Es hora de explorar una de las distribuciones de probabilidad más importantes en estadística, la distribución normal. Creará un histogramas para trazar distribuciones normales y comprenderá el teorema del límite central, antes de ampliar su conocimiento de las funciones estadísticas agregando las distribuciones <code>Poisson</code> , <code>exponencial</code> y <code>t</code> a su repertorio.</p>
+<section id="la-distribución-normal" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="la-distribución-normal"><span class="header-section-number">3.1</span> La distribución Normal</h2>
+<p>La siguiente distribución de probabilidad que discutiremos es la distribución normal. Es una de las distribuciones de probabilidad más importantes que aprenderá, ya que innumerables métodos estadísticos se basan en ella y se aplica a más situaciones del mundo real que las distribuciones que hemos cubierto hasta ahora.</p>
+<section id="qué-es-la-distribución-normal" class="level4" data-number="3.1.0.1">
+<h4 data-number="3.1.0.1" class="anchored" data-anchor-id="qué-es-la-distribución-normal"><span class="header-section-number">3.1.0.1</span> ¿Qué es la distribución normal?</h4>
+<p>La distribución normal se ve así.</p>
+<p><img src="fig46.png" class="img-fluid"></p>
+<p>Su forma se conoce comúnmente como <code>curva de campana</code>. La distribución normal tiene algunas propiedades importantes.</p>
+</section>
+<section id="simétrica" class="level4" data-number="3.1.0.2">
+<h4 data-number="3.1.0.2" class="anchored" data-anchor-id="simétrica"><span class="header-section-number">3.1.0.2</span> Simétrica</h4>
+<p>Primero, es simétrica, por lo que el lado izquierdo es una imagen especular del lado derecho.</p>
+<p><img src="fig47.png" class="img-fluid"></p>
+</section>
+<section id="área-1" class="level4" data-number="3.1.0.3">
+<h4 data-number="3.1.0.3" class="anchored" data-anchor-id="área-1"><span class="header-section-number">3.1.0.3</span> Área = 1</h4>
+<p>Segundo, como cualquier distribución continua, el área bajo la curva es 1.</p>
+<p><img src="fig48.png" class="img-fluid"></p>
+</section>
+<section id="la-curva-nunca-llega-a-0" class="level4" data-number="3.1.0.4">
+<h4 data-number="3.1.0.4" class="anchored" data-anchor-id="la-curva-nunca-llega-a-0"><span class="header-section-number">3.1.0.4</span> La curva nunca llega a 0</h4>
+<p>En tercer lugar, la probabilidad nunca llega a 0, incluso si lo parece en los extremos de la cola. Solo el 0.006% de su área está contenida más alla de los bordes de este gráfico.</p>
+<p><img src="fig49.png" class="img-fluid"></p>
+</section>
+<section id="descrita-por-media-y-desviación-estándar" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="descrita-por-media-y-desviación-estándar"><span class="header-section-number">3.1.1</span> Descrita por media y desviación estándar</h3>
+<p>La distribución normal se describe por su media y desviación estándar. Aquí hay una distribución normal con una media de 20 y una desviación estándar de 3</p>
+<p><img src="fig50.png" class="img-fluid"></p>
+<p>Aquí hay una distribución normal con una media de 0 y una desviación estandar de 1.</p>
+<p><img src="fig51.png" class="img-fluid"></p>
+<p>Cuando una distribución normal tiene una media de 0 y una desviación estándar de 1, es una distribución especial llamada <code>distribución normal estándar</code>. Observe cómo ambas distribuciones tienen la misma forma</p>
+<p><img src="fig52.png" class="img-fluid"></p>
+<p>pero sus hachas tienen diferentes escalas.</p>
+</section>
+<section id="áreas-bajo-la-distribución-normal" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="áreas-bajo-la-distribución-normal"><span class="header-section-number">3.1.2</span> Áreas bajo la distribución normal</h3>
+<p>Para la distribución normal, el 68% del área está dentro de 1 desviación estándar de la media.</p>
+<p><img src="fig53.png" class="img-fluid"></p>
+<p>95% del área cae dentro de 2 desviaciones estándar de la media</p>
+<p><img src="fig54.png" class="img-fluid"></p>
+<p>Y dl 99.7% del área cae dentro de tres desviaciones estándar. Esto a veces se llama la regla del 68%-95%-99.7%.</p>
+<p><img src="fig55.png" class="img-fluid"></p>
+</section>
+<section id="muchos-histogramas-parecen-normales" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="muchos-histogramas-parecen-normales"><span class="header-section-number">3.1.3</span> Muchos histogramas parecen normales</h3>
+<p>Hay muchos datos del mundo real en forma de distribución normal. Por ejemplo, aquí hay un histograma de las alturas de las mujeres que participaron en la Encuesta Nacional de Examen de Salud y Nutrición.</p>
+<p><img src="fig56.png" class="img-fluid"></p>
+<p>note que la altura media es de alrededor de 161 centímetros y la desviación estándar es de unos 7 centimetros.</p>
+</section>
+<section id="aproximación-de-datos-con-la-distribución-normal" class="level3" data-number="3.1.4">
+<h3 data-number="3.1.4" class="anchored" data-anchor-id="aproximación-de-datos-con-la-distribución-normal"><span class="header-section-number">3.1.4</span> Aproximación de datos con la distribución normal</h3>
+<p>Dado que estos datos de altura se asemejan mucho a la distribución normal, podemos tomar el área bajo una distribución normal con media 161 y desviación estándar 7 para aproximar qué porcentaje de mujeres se encuentra en diferentes rangos de altura.</p>
+<p><img src="fig57.png" class="img-fluid"></p>
+<section id="qué-porcentaje-de-mujeres-mide-menos-de-154-cm" class="level4" data-number="3.1.4.1">
+<h4 data-number="3.1.4.1" class="anchored" data-anchor-id="qué-porcentaje-de-mujeres-mide-menos-de-154-cm"><span class="header-section-number">3.1.4.1</span> ¿Qué porcentaje de mujeres mide menos de 154 cm?</h4>
+<p><img src="fig58.png" class="img-fluid"></p>
+<p>Podemos responder esto usando la función pnorm, que toma el área de la distribución normal menor que algún número. Pasamos el número de interés, 154, así como la media y la desviación estándar de la distribución normal que estamos usando. Esto nos da que alrededor del 16% de las mujeres miden menos de 154 centímetros.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">154</span>, <span class="at">mean =</span> <span class="dv">161</span>, <span class="at">sd =</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1586553</code></pre>
+</div>
+</div>
+</section>
+<section id="qué-porcentaje-de-mujeres-mide-más-de-154-cm" class="level4" data-number="3.1.4.2">
+<h4 data-number="3.1.4.2" class="anchored" data-anchor-id="qué-porcentaje-de-mujeres-mide-más-de-154-cm"><span class="header-section-number">3.1.4.2</span> ¿Qué porcentaje de mujeres mide más de 154 cm?</h4>
+<p><img src="fig59.png" class="img-fluid"></p>
+<p>Para encontrar el porcentaje de mujeres que miden más de 154 centímetros, podemos agregar el cuarto argumento <code>lower.tail = FALSE</code>, lo que tomará el área a la derecha del primer argumento.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">154</span>, <span class="at">mean =</span> <span class="dv">161</span>, <span class="at">sd =</span> <span class="dv">7</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8413447</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="qué-porcentaje-de-mujeres-mide-154-157-cm" class="level3" data-number="3.1.5">
+<h3 data-number="3.1.5" class="anchored" data-anchor-id="qué-porcentaje-de-mujeres-mide-154-157-cm"><span class="header-section-number">3.1.5</span> ¿Qué porcentaje de mujeres mide 154-157 cm?</h3>
+<p><img src="fig61.png" class="img-fluid"></p>
+<p>Para obtener el porcentaje de mujeres entre 154 y 157 centímetros de altura, podemos tomar el área por debajo de 157 y restar el área por debajo de 154, lo que nos deja el área entre 154 y 157.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">157</span>, <span class="at">mean =</span> <span class="dv">161</span>, <span class="at">sd =</span> <span class="dv">7</span>) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">154</span>, <span class="at">mean =</span> <span class="dv">161</span>, <span class="at">sd =</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1251993</code></pre>
+</div>
+</div>
+</section>
+<section id="qué-estatura-es-más-baja-que-el-90-de-las-mujeres" class="level3" data-number="3.1.6">
+<h3 data-number="3.1.6" class="anchored" data-anchor-id="qué-estatura-es-más-baja-que-el-90-de-las-mujeres"><span class="header-section-number">3.1.6</span> ¿Qué estatura es más baja que el 90% de las mujeres?</h3>
+<p><img src="fig62.png" class="img-fluid"></p>
+<p>También podemos calcular porcentajes a partir de alturas usando <code>qnorm()</code>. Para averiguar que estatura es más baja que el 90% de las mujeres, pasamos 0.9 en qnorm junto con las misma media y desviación estándar con las que hemos estado trabajando.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.9</span>, <span class="at">mean =</span> <span class="dv">161</span>, <span class="at">sd =</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 169.9709</code></pre>
+</div>
+</div>
+<p>Esto nos dice que el 90% de las mujeres miden menos de 170 centímetros.</p>
+</section>
+<section id="qué-altura-es-el-90-de-las-mujeres-más-altas-que" class="level3" data-number="3.1.7">
+<h3 data-number="3.1.7" class="anchored" data-anchor-id="qué-altura-es-el-90-de-las-mujeres-más-altas-que"><span class="header-section-number">3.1.7</span> ¿Qué altura es el 90% de las mujeres más altas que?</h3>
+<p><img src="fig63.png" class="img-fluid"></p>
+<p>Del mismo modo, podemos calcular la altura que el 90% de las mujeres son más altas que al establecer el argumento de cola de punto inferior de qnorm en <code>FALSO</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.9</span>, <span class="at">mean =</span> <span class="dv">161</span>, <span class="at">sd =</span> <span class="dv">7</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 152.0291</code></pre>
+</div>
+</div>
+</section>
+<section id="generaciones-de-números-aleatorios" class="level3" data-number="3.1.8">
+<h3 data-number="3.1.8" class="anchored" data-anchor-id="generaciones-de-números-aleatorios"><span class="header-section-number">3.1.8</span> Generaciones de números aleatorios</h3>
+<p>Al igual que con otras distribuciones, podemos generar números aleatorios a partir de una distribución normal usando <code>rnorm()</code>, pasando el tamaño de muestra que queremos junto con la media y la desviación estándar de la distribución. Aquí, hemos generado 10 alturas aletorias más.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">161</span>, <span class="at">sd =</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 165.5898 168.9200 158.4965 154.4749 171.6224 168.9358 155.4495 164.5532
+ [9] 162.2216 163.1967</code></pre>
+</div>
+</div>
+<p>Aquí hemos generado 10 alturas aleatorias más.</p>
+</section>
+<section id="ejercicio-14" class="level3" data-number="3.1.9">
+<h3 data-number="3.1.9" class="anchored" data-anchor-id="ejercicio-14"><span class="header-section-number">3.1.9</span> Ejercicio 14</h3>
+<p>Volvamos al ejercicio de los tratos cerrados por parte de Amir, dado que cada trato en el trabajó de Amir (tanto ganado como perdido) era diferente, cada uno valía una cantidad diferente de dinero. Estos valores siguien una distribución normal con una meida de 5000 dólares y una desviación estándar de 2000 dólares. Como parte de sus métricas de desempeño, desea calcular la probabilidad de que Amir cierre un trato por valor de varias cantidades.</p>
+<ul>
+<li><p>¿Cuál es la probabilidad de que Amir cierre un trato por menos de $7,500?</p>
+<p><span class="math display">\[
+P(trato &lt; 7500)
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">7500</span>, <span class="at">mean =</span> <span class="dv">5000</span>, <span class="at">sd =</span> <span class="dv">2000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8943502</code></pre>
+</div>
+</div></li>
+<li><p>¿cuál es la probabilidad de que Amir cierre un trato por valor de más de $1000?</p>
+<p><span class="math display">\[
+P(trato &gt; 1000)
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">1000</span>, <span class="at">mean =</span> <span class="dv">5000</span>, <span class="at">sd =</span> <span class="dv">2000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9772499</code></pre>
+</div>
+</div>
+<p><strong>Explicación:</strong> ¿por qué hago 1 - p? Pues la función de <code>pnorm</code> busca las probabilidades más pequeñas, es decir, me buscara la probabilidad que Amir cierre un trato que valga menos de $1000. Entonces todo lo que no sea menor que 1000 será superior, por lo que le resto la probabilidad</p>
+<p>La probabilidad que cierre uno menor que $1000 es:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">1000</span>, <span class="at">mean =</span> <span class="dv">5000</span>, <span class="at">sd =</span> <span class="dv">2000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02275013</code></pre>
+</div>
+</div></li>
+<li><p>¿Cuál es la probabilidad de que Amir cierre un trato por valor de entre $3000 y $7000?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">7000</span>, <span class="at">mean =</span> <span class="dv">5000</span>, <span class="at">sd =</span> <span class="dv">2000</span>) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">3000</span>, <span class="at">mean =</span> <span class="dv">5000</span>, <span class="at">sd =</span> <span class="dv">2000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6826895</code></pre>
+</div>
+</div></li>
+<li><p>¿Qué cantidad será más del 75% de las ventas de amir?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.75</span>, <span class="at">mean  =</span><span class="dv">5000</span>, <span class="at">sd =</span> <span class="dv">2000</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3651.02</code></pre>
+</div>
+</div>
+<p><strong>Explicación:</strong> en la teória he mencionado que habia 2 fórmulas. Esta es la segunda, aquí vamos a buscar los valores que pueden llegar a ganar con la probabilidad. Bien, esta fórmula, como la anterior, busca la probabilidad hacia la izquierda, es decir, me buscará la cantidad de ventas en las que la cantidad sea menor al 75% de las ventas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.75</span>, <span class="at">mean =</span> <span class="dv">5000</span>, <span class="at">sd =</span> <span class="dv">2000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6348.98</code></pre>
+</div>
+</div>
+<p>Sin embargo, no es lo que buscamos, nos preguntan que podemos hacer en el 75% del tiempo de Amir, en sus ventas, pues, cerrara tratos por encima de los $3,651.02.</p></li>
+</ul>
+</section>
+<section id="ejercicio-15" class="level3" data-number="3.1.10">
+<h3 data-number="3.1.10" class="anchored" data-anchor-id="ejercicio-15"><span class="header-section-number">3.1.10</span> Ejercicio 15</h3>
+<p><strong><em>Simulación de ventas bajo nuevas condiciones de mercado.</em></strong></p>
+<p>El analista financiero de la empresa predice que el próximo trimestre, el valor de cada venta aumentará un 20% y la volatidad, o desviación estándar, del valor de cada venta1 aumentará un 30%. Para ver cómo podrían ser la ventas de Amir el próximo trimestre en estas nuevas condiciones de mercado, simulará nuevos montos de ventas utilizando la distribución normal y los almacenará en una variable <code>new_sales</code>, que crearemos ahora mismo en R:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>new_sales <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">36</span>, <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_names</span>(<span class="st">"sale_num"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p>Actualmente, el monto de venta promedio de Amir es de $5000. Calcule cuál será su nueva cantidad promedio si aumenta en un 20% y guárdela en <code>new_mean</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>new_mean <span class="ot">&lt;-</span> <span class="dv">5000</span><span class="sc">*</span><span class="fl">1.2</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>new_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6000</code></pre>
+</div>
+</div></li>
+<li><p>La desviación estándar actual de amir es $2000. Calcule cuál será su nueva desviación estándar si aumenta en un 30% y guárdela en <code>new_sd</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>new_sd <span class="ot">&lt;-</span> <span class="dv">2000</span> <span class="sc">*</span> <span class="fl">1.3</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>new_sd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2600</code></pre>
+</div>
+</div></li>
+<li><p>Agregue una nueva columna llamada <code>amount</code> al marco de datos <code>new_sales</code>, que contiene 35 cantidades simuladas de una distribución normal con media de <code>new_mean</code> y una desviación estándar de <code>new_sd</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>new_sales <span class="ot">&lt;-</span> new_sales <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">amount =</span> <span class="fu">rnorm</span>(<span class="dv">36</span>, <span class="at">mean =</span> new_mean, <span class="at">sd =</span> new_sd))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Trace la distribución de <code>new_sales</code> y <code>amount</code> usando un histograma con 10 contenedores.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(new_sales, <span class="fu">aes</span>(amount)) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Teorema_LC_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="ejercicio-16" class="level3" data-number="3.1.11">
+<h3 data-number="3.1.11" class="anchored" data-anchor-id="ejercicio-16"><span class="header-section-number">3.1.11</span> Ejercicio 16</h3>
+<p><strong><em>¿Qué mercado es mejor?</em></strong></p>
+<p>La métrica clave que utiliza la empresa para evaluar a los vendedores es el porcentaje de ventas que realizan por encima de $1000, ya que el tiempo dedicado a cada venta suele valer un poco más que eso, por lo que cuanto mayor sea esta métrica, mejor será el rendimiento del vendedor.</p>
+<p>Recuerde que las cantidades de ventas actuales de amir tienen una media de $5000 y una desviación estándar de $2000, y las cantidades pronosticadas de Amir en el mercado del proximo trimestre tienen una media de $6000 y una desviación estándar de $2600.</p>
+<p>Basado solo en la métrica del <code>porcentaje de ventas de más de $1000</code>, ¿Amir se desempeña mejor en el mercado actual o en el mercado previo?</p>
+<p><strong>Respuesta:</strong> Amir se desempeña casi por igual en ambos mercados.</p>
+</section>
+</section>
+<section id="teorema-del-límite-central" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="teorema-del-límite-central"><span class="header-section-number">3.2</span> Teorema del Límite Central</h2>
+<p>Ahora que está familiarizado con la distribución normal, es hora de aprender qué es lo que la hace tan importante.</p>
+<section id="tirar-los-dados-5-veces" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="tirar-los-dados-5-veces"><span class="header-section-number">3.2.1</span> Tirar los dados 5 veces</h3>
+<p>volvamos a nuestro ejemplo de lanzamiento de dados. Tenemos un vector de los números del 1 al 6 llamado die.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>die <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Para simular tirar el dado 5 veces, usaremos la función <code>sample()</code> . Sample() funciona de la misma manera que <code>sample_n()</code>, excepto que toma muestras de un vector en lugar de un marco de datos. Pasamos el vector del que queremos muestrear, el tamaño de la muestra, y establecemos r<code>eplace</code> en TRUE. Esto nos da los resultados de 5 casos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>sample_of_5 <span class="ot">&lt;-</span> <span class="fu">sample</span>(die, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>sample_of_5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6 1 6 3 3</code></pre>
+</div>
+</div>
+<p>Ahora, tomaremos la media de los 5 casos, lo que nos da 3.6.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample_of_5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.8</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(die, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">mean</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.8</code></pre>
+</div>
+</div>
+<p>Si lo hacemos de nuevo obtenemos otra media</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(die, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">mean</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.2</code></pre>
+</div>
+</div>
+<p>Repitamos esto 10 veces: tiraremos 5 veces y sacaremos la media. Para hacer esto, usaremos <code>replicate()</code>. Le pasamos 10 para que el proceso se repita 10 veces, seguido del fragmento de código que queremos que se ejecute, que es el balanceo y el promedio. Esto devuelve un vector de 10 medias de muestra diferentes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>sample_mean <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10</span>, <span class="fu">sample</span>(die, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">mean</span>())</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>sample_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 3.8 2.2 3.8 4.0 3.0 2.2 4.0 3.8 3.8 3.8</code></pre>
+</div>
+</div>
+</section>
+<section id="distribuciones-muestrales" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="distribuciones-muestrales"><span class="header-section-number">3.2.2</span> Distribuciones Muestrales</h3>
+<p><img src="fig64.png" class="img-fluid"></p>
+<p>Una distribución de una estadística de resumen como esta se denomina distribución de muestreo. Esta distribución, especificamente, es una distribución muestral de la media muestral.</p>
+<section id="medias-de-100-muestras" class="level4" data-number="3.2.2.1">
+<h4 data-number="3.2.2.1" class="anchored" data-anchor-id="medias-de-100-muestras"><span class="header-section-number">3.2.2.1</span> Medias de 100 muestras</h4>
+<p>Ahora hagamos esto 100 veces. Si observamos la nueva distribución de muestreo, su forma se parece un a la distribución normal, aunque la distribución del dado es uniforme, auqnue la distribución del dado es uniforme.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">replicate</span>(<span class="dv">100</span>, <span class="fu">sample</span>(die, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">mean</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 2.0 4.6 2.8 3.8 3.4 4.2 2.2 4.8 3.2 3.4 3.6 4.6 4.6 2.8 3.4 3.8 3.8 4.0
+ [19] 3.2 3.6 3.4 3.4 3.0 2.0 4.0 3.2 2.6 4.6 3.0 3.8 3.6 3.6 3.6 4.6 3.8 4.0
+ [37] 3.8 3.8 4.0 4.4 3.0 5.0 2.8 3.2 2.4 3.6 4.4 3.6 3.4 4.6 3.6 2.6 2.4 2.6
+ [55] 3.4 3.0 4.0 2.6 3.6 3.6 1.4 4.4 4.8 2.8 3.4 4.0 3.0 2.6 3.8 1.2 3.6 3.4
+ [73] 3.4 2.2 2.2 3.2 3.8 3.2 4.6 4.0 3.6 3.0 4.0 3.0 3.6 2.6 2.2 4.0 3.6 3.2
+ [91] 4.8 1.4 3.2 3.2 2.2 3.4 3.2 2.8 2.0 4.8</code></pre>
+</div>
+</div>
+<p><img src="fig65.png" class="img-fluid"></p>
+</section>
+<section id="medias-de-muestra" class="level4" data-number="3.2.2.2">
+<h4 data-number="3.2.2.2" class="anchored" data-anchor-id="medias-de-muestra"><span class="header-section-number">3.2.2.2</span> 1000 medias de muestra</h4>
+<p>Ahora tomemos 1000 medias.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sample_means <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">sample</span>(die, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">mean</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="fig66.png" class="img-fluid"></p>
+<p>Esta distribución de muestreo se parece más a la distribución normal.</p>
+<p>Este fenomeno se conoce como <code>teorema del límite central</code>.</p>
+</section>
+</section>
+<section id="teorema-del-límite-central-1" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="teorema-del-límite-central-1"><span class="header-section-number">3.2.3</span> Teorema del Límite Central</h3>
+<p><img src="fig67.png" class="img-fluid"></p>
+<p>Establece que una distribución muestral se acercará a una distribución normal a medida que aumenta el número de ensayos. En nuestros ejemplo, la distribución muestral se acercó más a la distribución normal a medida que tomamos más y más medias muestrales. Es importante tener en cuenta que el teorema del límite central solo se aplica cuando las muestras se toman al azar y son independientes, por ejemplo, al seleccionar acuerdos de venta con reemplazo.</p>
+<section id="desviación-estándar-y-tlc" class="level4" data-number="3.2.3.1">
+<h4 data-number="3.2.3.1" class="anchored" data-anchor-id="desviación-estándar-y-tlc"><span class="header-section-number">3.2.3.1</span> Desviación Estándar y TLC</h4>
+<p>El teorema del límite central, o TLC, también se aplica a otras estadísticas de resumen. Si tomamos la desviación estándar de 5 intentos 1000 veces, las desviaciones estándar de la muestra se distribuyen normalmente, centrados alrededor de 1.9, que es la desviación estándar de la distribución.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>sample_sd <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">sample</span>(die, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">sd</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="fig68.png" class="img-fluid"></p>
+</section>
+<section id="proporciones-y-el-tlc" class="level4" data-number="3.2.3.2">
+<h4 data-number="3.2.3.2" class="anchored" data-anchor-id="proporciones-y-el-tlc"><span class="header-section-number">3.2.3.2</span> Proporciones y el TLC</h4>
+<p>Otra estadística a la que se aplica la condición del TLC es a la proporción.</p>
+<p>Hagamos una muestra del equipo de ventas 10 veces con reemplazo y veamos cuántos sorteos tienen a Claire como resultado.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>sales_team <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Amir"</span>, <span class="st">"Brian"</span>, <span class="st">"Claire"</span>, <span class="st">"Damian"</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(sales_team, <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Claire" "Damian" "Claire" "Claire" "Amir"   "Amir"   "Claire" "Claire"
+ [9] "Claire" "Claire"</code></pre>
+</div>
+</div>
+<p>En este caso el 20% de los sorteos fueron de Claire. Si volvemos a sortear</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(sales_team, <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Amir"   "Amir"   "Amir"   "Brian"  "Damian" "Damian" "Claire" "Amir"  
+ [9] "Amir"   "Claire"</code></pre>
+</div>
+</div>
+<p>Hay un 40% de Claire.</p>
+</section>
+</section>
+<section id="distribución-muestral-de-proporciones" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="distribución-muestral-de-proporciones"><span class="header-section-number">3.2.4</span> Distribución muestral de proporciones</h3>
+<p>Si repetimos esto 1000 veces y gráficamos la distribución de las proporciones de la muestra, parece una distribución normal centrada al rededor de 0.25, ya que el nombre de Claire estaba en el 25% de los boletos.</p>
+<p><img src="fig69.png" class="img-fluid"></p>
+</section>
+<section id="media-de-la-distribución-muestral" class="level3" data-number="3.2.5">
+<h3 data-number="3.2.5" class="anchored" data-anchor-id="media-de-la-distribución-muestral"><span class="header-section-number">3.2.5</span> Media de la distribución muestral</h3>
+<p>Dado que estas distribuciones de muestreo son normales, podemos tomar su media para obtener una estimación de la media, la desviación estándar o la proporción de una distribución. Si tomamos la media de nuestras medias muestrales anteriores, obtenemos</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample_means)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.461</code></pre>
+</div>
+</div>
+<p>Esto está bastante cerca del valor esperado, que es 3.5. De manera similar, la media de las proporciones muestrales de Claires no está muy lejos de 0.25. En estos ejemplos, sabemos cómo son las distribuciones subyacentes, pero si no lo sabemos, esto puede ser un método útil para estimar las características de una distribución subyacente.</p>
+<p>El teorema del límite central también es útil cuando tienes una gran población y no tienes el tiempo o los recursos para recopilar datos sobre todos. En su lugar, puede recolectar varias muestras más pequenas y crear una distribución de muestreo para estimar cuál es la media o la desviación estándar.</p>
+</section>
+<section id="distribución-de-poisson" class="level3" data-number="3.2.6">
+<h3 data-number="3.2.6" class="anchored" data-anchor-id="distribución-de-poisson"><span class="header-section-number">3.2.6</span> Distribución de Poisson</h3>
+<p>Hablemos sobre otra distribución de probabilidad llamada distribución de Poisson.</p>
+<section id="proceso-de-poisson" class="level4" data-number="3.2.6.1">
+<h4 data-number="3.2.6.1" class="anchored" data-anchor-id="proceso-de-poisson"><span class="header-section-number">3.2.6.1</span> Proceso de Poisson</h4>
+<p>Antes de hablar de probabilidad, definamos un proceso de Poisson. Un proceso de Poisson es un proceso en el que los eventos parecen suceder a una determinada velocidad, pero completamente al azar. Por ejemplo, el número de animales adoptados de un refugio de animales cada semana es un proceso de Poisson: Podemos saber que en promedio hay 8 adopciones por semana, pero este número puede diferir aleatoriamente. Otros ejemplos serían la cantidad de personas que llegan a un restaurante cada hora, o la cantidad de terremotos por año en california.</p>
+</section>
+<section id="distribución-de-poisson-1" class="level4" data-number="3.2.6.2">
+<h4 data-number="3.2.6.2" class="anchored" data-anchor-id="distribución-de-poisson-1"><span class="header-section-number">3.2.6.2</span> Distribución de Poisson</h4>
+<p>La distribución de Poisson describe la probabilidad de que ocurra una cierta cantidad de eventos durante un período fijo de tiempo. Podemos usar la distribución de Poisson para calcular la probabilidad de que al menos <span class="math inline">\((\geq)\)</span> 5 animales sean adoptados en una semana, la probabilidad de que 12 personas lleguen a un restaurante en una hora o la probabilidad de menos <span class="math inline">\((&lt;)\)</span> de 20 terremotos en California en un año.</p>
+</section>
+<section id="lambda-lambda" class="level4" data-number="3.2.6.3">
+<h4 data-number="3.2.6.3" class="anchored" data-anchor-id="lambda-lambda"><span class="header-section-number">3.2.6.3</span> Lambda <span class="math inline">\((\lambda)\)</span></h4>
+<p>La distribución de Poisson se describe mediante un valor denominado lambda, que representa el número promedio de eventos por período de tiempo. El ejemplo del refujio de animales, este sería el número promedio de adopciones por semana, que es 8. Este valor también es el valor esperado de la distribución. La distribución de Poisson con <span class="math inline">\(\lambda = 8\)</span> se ve así.</p>
+<p><img src="fig70.png" class="img-fluid"></p>
+<p>Note que es una distribución discreta ya que estamos contando eventos 7 y 8 son el número más probable de adopciones que se producirán en una semana.</p>
+</section>
+<section id="lambda-es-el-pico-de-la-distribución" class="level4" data-number="3.2.6.4">
+<h4 data-number="3.2.6.4" class="anchored" data-anchor-id="lambda-es-el-pico-de-la-distribución"><span class="header-section-number">3.2.6.4</span> Lambda es el pico de la distribución</h4>
+<p>Lambda cambia la forma de la distribución, por lo que una distribución de Poisson con lambda igual a 1, curva color rojo, se ve muy diferente a una distribución Poisson con lambda igual a 8, en azul, pero pase lo que pase, el pico de la distribución siempre estpa en su valor lambda.</p>
+<p><img src="fig71.png" class="img-fluid"></p>
+</section>
+<section id="probabilidad-de-un-solo-valor" class="level4" data-number="3.2.6.5">
+<h4 data-number="3.2.6.5" class="anchored" data-anchor-id="probabilidad-de-un-solo-valor"><span class="header-section-number">3.2.6.5</span> Probabilidad de un solo valor</h4>
+<p><span class="math display">\[
+P(\mbox{\# de adopciones en una semana} = 5)?
+\]</span></p>
+<p>Dado que el número promedio de adopciones por semana es 8, ¿cuál es la probabilidad de 5 adopciones en una semana? Usaremos la función <code>dpois</code>, pasando 5 como primer argumento y 8 como segundo argumento para indicar la media de la distribución. Esto nos da alrededor del 9%.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dpois</span>(<span class="dv">5</span>, <span class="at">lambda =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09160366</code></pre>
+</div>
+</div>
+</section>
+<section id="probabilidad-de-menor-o-igual-que" class="level4" data-number="3.2.6.6">
+<h4 data-number="3.2.6.6" class="anchored" data-anchor-id="probabilidad-de-menor-o-igual-que"><span class="header-section-number">3.2.6.6</span> Probabilidad de menor o igual que</h4>
+<p><span class="math display">\[
+P(\mbox{\# de adopciones en una semana}\leq 5)?
+\]</span></p>
+<p>Para obtener la probabilidad de que ocurran 5 adopciones o menos en una semana, usamos la función <code>ppois()</code>, pasando los mismos números. Esto nos da alrededor del 20%</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ppois</span>(<span class="dv">5</span>, <span class="at">lambda =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1912361</code></pre>
+</div>
+</div>
+</section>
+<section id="probabilidad-de-mayor-que" class="level4" data-number="3.2.6.7">
+<h4 data-number="3.2.6.7" class="anchored" data-anchor-id="probabilidad-de-mayor-que"><span class="header-section-number">3.2.6.7</span> Probabilidad de mayor que</h4>
+<p><span class="math display">\[
+P(\mbox{\# de adopciones en una semana} &gt; 5)?
+\]</span></p>
+<p>Al igual que otras funciones de probabilidad que ha aprendido hasta ahora, use el argumento de cola de punto inferior para obtener la probabilidad de más de 5 adopciones.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ppois</span>(<span class="dv">5</span>, <span class="at">lambda =</span> <span class="dv">8</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8087639</code></pre>
+</div>
+</div>
+<p>Hay un 81% de posibilidades de que se produzcan más de 5 adopciones. Si el número promedio de adopciones aumenta a 10 por semana,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ppois</span>(<span class="dv">5</span>, <span class="at">lambda =</span> <span class="dv">10</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.932914</code></pre>
+</div>
+</div>
+<p>habrá un 93% de posibilidades de que ocurra más de 5 adopciones.</p>
+</section>
+</section>
+<section id="muestreo-a-partir-de-una-distribución-de-poisson" class="level3" data-number="3.2.7">
+<h3 data-number="3.2.7" class="anchored" data-anchor-id="muestreo-a-partir-de-una-distribución-de-poisson"><span class="header-section-number">3.2.7</span> Muestreo a Partir de una distribución de Poisson</h3>
+<p>Al igual que otras distribuciones, podemos tomar muestras de las distribuciones de Poisson usando <code>rpois()</code>. Aquí, simularemos 10 semanas diferentes en el refugio de animales.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpois</span>(<span class="dv">10</span>, <span class="at">lambda =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  5  6  7  6  7 13  6  7  9  6</code></pre>
+</div>
+</div>
+<p>En una semana hay 6 adopciones, pero en otra solo 5.</p>
+<section id="el-torema-del-límite-central-aún-se-aplica" class="level4" data-number="3.2.7.1">
+<h4 data-number="3.2.7.1" class="anchored" data-anchor-id="el-torema-del-límite-central-aún-se-aplica"><span class="header-section-number">3.2.7.1</span> EL Torema del Límite Central aún se Aplica</h4>
+<p>Al igual que otras distribuciones, la distribución muestral de medias muestrales de una distribución de Poisson parece normal con una gran cantidad de muestras.</p>
+<p><img src="fig72.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="ejercicio-17" class="level3" data-number="3.2.8">
+<h3 data-number="3.2.8" class="anchored" data-anchor-id="ejercicio-17"><span class="header-section-number">3.2.8</span> Ejercicio 17</h3>
+<p>Ahora que ha aprendido acerca de la distribución de Poisson, sabe que su forma está descrita por un valor llamado lambda. En este ejercicio, relacionará histogramas con valores lambda.</p>
+<p><img src="fig73.png" class="img-fluid"></p>
+</section>
+<section id="ejercicio-18" class="level3" data-number="3.2.9">
+<h3 data-number="3.2.9" class="anchored" data-anchor-id="ejercicio-18"><span class="header-section-number">3.2.9</span> Ejercicio 18</h3>
+<p>Su empresa utiliza software de ventas para realizar un seguimiento de los nuevos clientes potenciales de ventas. Los organiza en una cola para que cualquiera pueda hacer un seguimiento de uno cuando tenga un poco de tiempo libre. Dado que el número de respuestas de clientes potenciales es un resultado contable durante un período de tiempo, este escenario corresponde a una distribución de Poisson. En promedio, Amir responde a 4 clientes potenciales cada día. En este ejercicio, calculará las probabilidades de que Amir responda a diferentes cantidades de clientes potenciales.</p>
+<ul>
+<li><p>¿Cuál es la probabilidad de que Amir responda a 5 clientes potenciales en un dia, dado que responde a un promedio de 4 clientes?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dpois</span>(<span class="dv">5</span>, <span class="at">lambda =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1562935</code></pre>
+</div>
+</div></li>
+<li><p>El compañero de trabajo de Amir respnde a un promedio de 5.5 clientes potenciales por día. ¿Cuál es la probabilidad de que responda 5 clientes en un día?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dpois</span>(<span class="dv">5</span>, <span class="fl">5.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1714007</code></pre>
+</div>
+</div></li>
+<li><p>¿Cuàl es la probabilidad de que Amir responda a 2 clientes potenciales o menos en un día?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ppois</span>(<span class="dv">2</span>, <span class="at">lambda =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2381033</code></pre>
+</div>
+</div></li>
+<li><p>¿Cuál es la probabilidad de que Amir responda a más de 10 clientes potenciales en un día?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ppois</span>(<span class="dv">10</span>, <span class="at">lambda =</span> <span class="dv">4</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.002839766</code></pre>
+</div>
+</div></li>
+</ul>
+<p><strong><code>Observación:</code></strong> Tenga en cuenta que si proporciona <em>dpois()</em> o <em>ppois()</em> con un número no entero, devuelve 0 y muestra una advertencia, ya que la distribución de Poisson solo se aplica a los números enteros.</p>
+</section>
+<section id="mas-distribuciones-de-probabilidad" class="level3" data-number="3.2.10">
+<h3 data-number="3.2.10" class="anchored" data-anchor-id="mas-distribuciones-de-probabilidad"><span class="header-section-number">3.2.10</span> Mas distribuciones de Probabilidad</h3>
+<p>Aquí discutiremos algunas otras distribuciones de probabildad.</p>
+<section id="distribución-exponencial" class="level4" data-number="3.2.10.1">
+<h4 data-number="3.2.10.1" class="anchored" data-anchor-id="distribución-exponencial"><span class="header-section-number">3.2.10.1</span> Distribución Exponencial</h4>
+<p>La primera distribución es la distribución exponencial, que representa la probabilidad de que pase cierto tiempo entre eventos de Poisson. Podemos usar la distribución exponencial, para predecir, por ejemplo, la probabilidad de más de 1 día de adopciones, la probabilidad de menos de 10 minutos entre llegadas a restaurantes y la probabilidad que pasen de 6 a 8 meses entre terremotos. La distribución exponencial utiliza el mismo valor <span class="math inline">\(\lambda\)</span>, que representa la tasa, que la distribución de Poisson. Tenga en cuenta que lambda y tasa significan el mismo valor en este contexto. También es continua, a diferencia de la distribución de Poisson, ya que representa el tiempo.</p>
+<section id="solicitudes-de-atención-al-cliente" class="level5" data-number="3.2.10.1.1">
+<h5 data-number="3.2.10.1.1" class="anchored" data-anchor-id="solicitudes-de-atención-al-cliente"><span class="header-section-number">3.2.10.1.1</span> Solicitudes de atención al cliente</h5>
+<p>Por ejemplo, digamos que se crea un ticket de sevicio al cliente cada 2 minutos. Podemos reformular esto para que sea en términos de un intervalo de tiempo de un minuto, por lo que se crea la mitad de un ticket cada minuto. Usaremos 0.5 como valor lambda. La distribución exponencial con una tasa de un medio se ve así.</p>
+<p><img src="fig74.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="lambda-en-distribución-exponencial" class="level4" data-number="3.2.10.2">
+<h4 data-number="3.2.10.2" class="anchored" data-anchor-id="lambda-en-distribución-exponencial"><span class="header-section-number">3.2.10.2</span> Lambda en Distribución Exponencial</h4>
+<p>La tasa afecta la forma de la distribución y qué tan abruptamente declina.</p>
+<p><img src="fig75.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="probabilidades" class="level3" data-number="3.2.11">
+<h3 data-number="3.2.11" class="anchored" data-anchor-id="probabilidades"><span class="header-section-number">3.2.11</span> Probabilidades</h3>
+<p>Similar a otras distribuciones continuas, podemos usar <code>pexp()</code> para calcular probabilidades.</p>
+<p>Se calcula la probabilidad de esperar menos de 1 minuto por una nueva solicitud.</p>
+<p><span class="math display">\[
+P(esperar &lt; \mbox{1 minuto})
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(<span class="dv">1</span>, <span class="at">rate =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3934693</code></pre>
+</div>
+</div>
+<p>lo que nos da un 40% de posibilidades.</p>
+<p>La probabilidad de esperar más de 4 minutos</p>
+<p><span class="math display">\[
+P(esperar &gt; 4min)
+\]</span></p>
+<p>se puede encontrar utilizando la cola de punto inferior igual a FALSO, lo que da una probabilidad del 13%.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(<span class="dv">4</span>, <span class="at">rate =</span> <span class="fl">0.5</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1353353</code></pre>
+</div>
+</div>
+<p>Finalmente la probabilidad de esperar entre 1 y 4 minutos.</p>
+<p><span class="math display">\[
+P(1min &lt; esperar &lt; 4 min)
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(<span class="dv">4</span>, <span class="at">rate =</span> <span class="fl">0.5</span>) <span class="sc">-</span> <span class="fu">pexp</span>(<span class="dv">1</span>, <span class="at">rate =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4711954</code></pre>
+</div>
+</div>
+<p>Por tanto, hay un 50% de posibilidades de esperar entre 1 y 4 minutos.</p>
+</section>
+<section id="valor-esperado-de-la-distribución-exponencial" class="level3" data-number="3.2.12">
+<h3 data-number="3.2.12" class="anchored" data-anchor-id="valor-esperado-de-la-distribución-exponencial"><span class="header-section-number">3.2.12</span> Valor esperado de la Distribución Exponencial</h3>
+<p>Recuerde que lambda es el valor esperado de la distribución de Poisson, que mide la frecuencia en términos de tasa o número de eventos.</p>
+<p>En nuestro ejemplo de ticket de servicio al cliente, esto significa que la cantidad esperada de solicitudes por minuto es 0.5.</p>
+<p>La distribución exponencial mide la frecuencia en términos de tiempo entre eventos. El valor esperado de la distribución exponencial se puede calcular tomando 1 dividido por lambda.</p>
+<p>En nuestro ejemplo, el tiempo esperado entre solicitudes es <span class="math display">\[\frac{1}{0.5} = 2\]</span></p>
+<p>Por lo que hay un promedio de 2 minutos entre solicitudes.</p>
+</section>
+<section id="distribución-t-students" class="level3" data-number="3.2.13">
+<h3 data-number="3.2.13" class="anchored" data-anchor-id="distribución-t-students"><span class="header-section-number">3.2.13</span> Distribución t-Students</h3>
+<p><img src="fig76.png" class="img-fluid"></p>
+<p>La siguiente distribución es la distribución t, que aveces también se denomina distribución t de Student.</p>
+<p>Su forma es similar a la distribución normal, pero no exactamente igual.</p>
+<p>Sin comparamos la distribución normal, en rojo, con la distribución t, en verde, con 1 grado de libertad, las colas de la distribución t son más gruesas. Esto significa que en una distribución t, es más probable que las observaciones se alejen más de la media.</p>
+<section id="grados-de-libertad" class="level4" data-number="3.2.13.1">
+<h4 data-number="3.2.13.1" class="anchored" data-anchor-id="grados-de-libertad"><span class="header-section-number">3.2.13.1</span> Grados de Libertad</h4>
+<p><img src="fig77.png" class="img-fluid"></p>
+<p>La distribución t tiene un parámetro llamado grados de libertad, que afecta el grosor de las colas de la distribución.</p>
+<p>Los grados de libertad más bajos dan como resultado colas más gruesas y una desviación estándar más alta.</p>
+<p>A medida que aumenta el número de grados de libertad, la distribución se parece cada vez más a la distribución normal.</p>
+</section>
+</section>
+<section id="distribución-log-normal" class="level3" data-number="3.2.14">
+<h3 data-number="3.2.14" class="anchored" data-anchor-id="distribución-log-normal"><span class="header-section-number">3.2.14</span> Distribución Log-Normal</h3>
+<p>La última distribución que discutiremos es la distribución <code>log-normal</code>.</p>
+<p>Las variables que siguen una distribución logarítmica normal tienen un logarítmo que se distribuye normalmente. Esto da como resultado distribuciones asimétricas, a diferencia de la distribución normal.</p>
+<p><img src="fig78.png" class="img-fluid"></p>
+<p>Existen muchos ejemplos del mundo real que siguen esta distribución, como la longitud de juegos de ajedrez, la presión arterial en adultos y el número de hospitalizaciones en el brote SARS de 2003.</p>
+<p>Además de las tres distribuciones que vimos en esta sección, hay muchas otras distribuciones de probabilidad.</p>
+</section>
+<section id="ejercicio-19" class="level3" data-number="3.2.15">
+<h3 data-number="3.2.15" class="anchored" data-anchor-id="ejercicio-19"><span class="header-section-number">3.2.15</span> Ejercicio 19</h3>
+<p>En este punto, ha aprendido acerca de tantas distribuciones de probabilidad diferentes que pueden ser difícil recordar cuál es cuál. En este ejercicio, practicaremos distinguir entre distribuciones e identificar la distrubución que mejor se adapte a diferentes escenarios</p>
+<p>En la siguiente tabla relacionamos cada situación con la distribución que mejor la modele.</p>
+<table class="table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 33%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Poisson</th>
+<th>Exponencial</th>
+<th>Binomio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Número de clientes que entran en una tienda cada hora.</td>
+<td>Cantidad de tiempo hasta que alguien paga su préstamo.</td>
+<td>Número de personas de un grupo de 30 que aprueban su examen de conducir.</td>
+</tr>
+<tr class="even">
+<td>Número de productos vendidos cada semana.</td>
+<td>Cantidad de tiempo hasta que el próximo cliente haga su compra.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ejercicio-20" class="level3" data-number="3.2.16">
+<h3 data-number="3.2.16" class="anchored" data-anchor-id="ejercicio-20"><span class="header-section-number">3.2.16</span> Ejercicio 20</h3>
+<p>Para evaluar más a fondo el rendimiento de Amir, querrá saber cuánto tiempo le lleva responder a un cliente potencial después de abrirlo. En promedio, tarde 2.5 horas en responder. En este ejercicio, calculará las probabilidades de las diferentes cantidades de tiempo que transcurren entre que Amir recibe un cliente potencial y envía una respuesta.</p>
+<ul>
+<li><p>¿Cuál es la probabilidad de que Amir tarde menos de una hora en responder a un cliente potencial?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(<span class="dv">1</span>, <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span><span class="fl">2.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.32968</code></pre>
+</div>
+</div></li>
+<li><p>¿Cuál es la probabilidad de que Amir tarde más de 4 horas en responder a un cliente potencial?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(<span class="dv">4</span>, <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span><span class="fl">2.5</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2018965</code></pre>
+</div>
+</div></li>
+<li><p>¿Cuál es la probabilidad de que Amir tarde entre 3 y 4 horas en responder a un cliente potencial?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(<span class="dv">4</span>, <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span><span class="fl">2.5</span>) <span class="sc">-</span> <span class="fu">pexp</span>(<span class="dv">3</span>, <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span><span class="fl">2.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09929769</code></pre>
+</div>
+</div>
+<p><br>
+</p></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./summary.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Números aleatorios y Probabilidad</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./correlacion_de.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Correlación y Diseño Experimental</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Fundamentos Estadísticos con R - 2&nbsp; Números aleatorios y Probabilidad</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Teorema_LC.html" rel="next">
+<link href="./intro.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./summary.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Números aleatorios y Probabilidad</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Fundamentos Estadísticos con R</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Summary (resumen) Estadística</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Números aleatorios y Probabilidad</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Teorema_LC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Más Distribuciones y el Teorema del Límite Central</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./correlacion_de.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Correlación y Diseño Experimental</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#qué-son-las-probabilidades" id="toc-qué-son-las-probabilidades" class="nav-link active" data-scroll-target="#qué-son-las-probabilidades"><span class="header-section-number">2.1</span> ¿Qué son las probabilidades?</a></li>
+  <li><a href="#asisgnación-de-vendedores" id="toc-asisgnación-de-vendedores" class="nav-link" data-scroll-target="#asisgnación-de-vendedores"><span class="header-section-number">2.2</span> Asisgnación de Vendedores</a>
+  <ul class="collapse">
+  <li><a href="#muestreo-desde-un-marco-de-datos" id="toc-muestreo-desde-un-marco-de-datos" class="nav-link" data-scroll-target="#muestreo-desde-un-marco-de-datos"><span class="header-section-number">2.2.1</span> Muestreo desde un marco de datos</a></li>
+  <li><a href="#establecer-una-semilla-aleatoria" id="toc-establecer-una-semilla-aleatoria" class="nav-link" data-scroll-target="#establecer-una-semilla-aleatoria"><span class="header-section-number">2.2.2</span> Establecer una semilla aleatoria</a></li>
+  <li><a href="#un-segundo-encuentro" id="toc-un-segundo-encuentro" class="nav-link" data-scroll-target="#un-segundo-encuentro"><span class="header-section-number">2.2.3</span> Un segundo encuentro</a></li>
+  <li><a href="#eventos-independientes" id="toc-eventos-independientes" class="nav-link" data-scroll-target="#eventos-independientes"><span class="header-section-number">2.2.4</span> Eventos Independientes</a></li>
+  </ul></li>
+  <li><a href="#ejemplo-6" id="toc-ejemplo-6" class="nav-link" data-scroll-target="#ejemplo-6"><span class="header-section-number">2.3</span> Ejemplo 6</a></li>
+  <li><a href="#distribuciones-discretas" id="toc-distribuciones-discretas" class="nav-link" data-scroll-target="#distribuciones-discretas"><span class="header-section-number">2.4</span> Distribuciones Discretas</a>
+  <ul class="collapse">
+  <li><a href="#distribución-de-probabilidad" id="toc-distribución-de-probabilidad" class="nav-link" data-scroll-target="#distribución-de-probabilidad"><span class="header-section-number">2.4.1</span> Distribución de Probabilidad</a></li>
+  <li><a href="#visualización-de-probabilidades-desiguales" id="toc-visualización-de-probabilidades-desiguales" class="nav-link" data-scroll-target="#visualización-de-probabilidades-desiguales"><span class="header-section-number">2.4.2</span> Visualización de Probabilidades desiguales</a></li>
+  </ul></li>
+  <li><a href="#distribución-uniforme" id="toc-distribución-uniforme" class="nav-link" data-scroll-target="#distribución-uniforme"><span class="header-section-number">2.5</span> Distribución Uniforme</a></li>
+  <li><a href="#muestreo-a-partir-de-distribuciones-discretas" id="toc-muestreo-a-partir-de-distribuciones-discretas" class="nav-link" data-scroll-target="#muestreo-a-partir-de-distribuciones-discretas"><span class="header-section-number">2.6</span> Muestreo a partir de distribuciones discretas</a>
+  <ul class="collapse">
+  <li><a href="#visualización-de-la-muestra" id="toc-visualización-de-la-muestra" class="nav-link" data-scroll-target="#visualización-de-la-muestra"><span class="header-section-number">2.6.1</span> Visualización de la muestra</a></li>
+  </ul></li>
+  <li><a href="#distribución-muestral-vs-distribución-teórica" id="toc-distribución-muestral-vs-distribución-teórica" class="nav-link" data-scroll-target="#distribución-muestral-vs-distribución-teórica"><span class="header-section-number">2.7</span> Distribución muestral vs distribución teórica</a>
+  <ul class="collapse">
+  <li><a href="#una-muestra-más-grande" id="toc-una-muestra-más-grande" class="nav-link" data-scroll-target="#una-muestra-más-grande"><span class="header-section-number">2.7.1</span> Una muestra más grande</a></li>
+  <li><a href="#ley-de-los-grandes-números" id="toc-ley-de-los-grandes-números" class="nav-link" data-scroll-target="#ley-de-los-grandes-números"><span class="header-section-number">2.7.2</span> Ley de los grandes números</a></li>
+  </ul></li>
+  <li><a href="#ejercicio-7" id="toc-ejercicio-7" class="nav-link" data-scroll-target="#ejercicio-7"><span class="header-section-number">2.8</span> Ejercicio 7</a>
+  <ul class="collapse">
+  <li><a href="#indentificación-de-distribuciones" id="toc-indentificación-de-distribuciones" class="nav-link" data-scroll-target="#indentificación-de-distribuciones"><span class="header-section-number">2.8.1</span> Indentificación de distribuciones</a></li>
+  </ul></li>
+  <li><a href="#distribuciones-continuas" id="toc-distribuciones-continuas" class="nav-link" data-scroll-target="#distribuciones-continuas"><span class="header-section-number">2.9</span> Distribuciones Continuas</a>
+  <ul class="collapse">
+  <li><a href="#distribución-uniforme-continua" id="toc-distribución-uniforme-continua" class="nav-link" data-scroll-target="#distribución-uniforme-continua"><span class="header-section-number">2.9.1</span> Distribución uniforme continua</a></li>
+  <li><a href="#distribución-uniforme-en-r" id="toc-distribución-uniforme-en-r" class="nav-link" data-scroll-target="#distribución-uniforme-en-r"><span class="header-section-number">2.9.2</span> Distribución Uniforme en R</a></li>
+  <li><a href="#cola-inferior" id="toc-cola-inferior" class="nav-link" data-scroll-target="#cola-inferior"><span class="header-section-number">2.9.3</span> Cola Inferior</a></li>
+  <li><a href="#otras-distribuciones-continuas" id="toc-otras-distribuciones-continuas" class="nav-link" data-scroll-target="#otras-distribuciones-continuas"><span class="header-section-number">2.9.4</span> Otras Distribuciones Continuas</a></li>
+  </ul></li>
+  <li><a href="#ejercicio-8" id="toc-ejercicio-8" class="nav-link" data-scroll-target="#ejercicio-8"><span class="header-section-number">2.10</span> Ejercicio 8</a></li>
+  <li><a href="#ejercicio-9" id="toc-ejercicio-9" class="nav-link" data-scroll-target="#ejercicio-9"><span class="header-section-number">2.11</span> Ejercicio 9</a></li>
+  <li><a href="#ejercicio-10" id="toc-ejercicio-10" class="nav-link" data-scroll-target="#ejercicio-10"><span class="header-section-number">2.12</span> Ejercicio 10</a></li>
+  <li><a href="#distribución-binomial" id="toc-distribución-binomial" class="nav-link" data-scroll-target="#distribución-binomial"><span class="header-section-number">2.13</span> Distribución Binomial</a>
+  <ul class="collapse">
+  <li><a href="#lanzamiento-de-monedas" id="toc-lanzamiento-de-monedas" class="nav-link" data-scroll-target="#lanzamiento-de-monedas"><span class="header-section-number">2.13.1</span> Lanzamiento de monedas</a></li>
+  <li><a href="#resultados-binarios" id="toc-resultados-binarios" class="nav-link" data-scroll-target="#resultados-binarios"><span class="header-section-number">2.13.2</span> Resultados Binarios</a></li>
+  <li><a href="#muchas-volteretas-una-vez" id="toc-muchas-volteretas-una-vez" class="nav-link" data-scroll-target="#muchas-volteretas-una-vez"><span class="header-section-number">2.13.3</span> Muchas volteretas una vez</a></li>
+  <li><a href="#muchas-volteretas-muchas-veces" id="toc-muchas-volteretas-muchas-veces" class="nav-link" data-scroll-target="#muchas-volteretas-muchas-veces"><span class="header-section-number">2.13.4</span> Muchas volteretas muchas veces</a></li>
+  <li><a href="#otras-probabilidades" id="toc-otras-probabilidades" class="nav-link" data-scroll-target="#otras-probabilidades"><span class="header-section-number">2.13.5</span> Otras probabilidades</a></li>
+  </ul></li>
+  <li><a href="#distribución-binomial-1" id="toc-distribución-binomial-1" class="nav-link" data-scroll-target="#distribución-binomial-1"><span class="header-section-number">2.14</span> Distribución Binomial</a>
+  <ul class="collapse">
+  <li><a href="#cuál-es-la-probabilidad-de-7-caras" id="toc-cuál-es-la-probabilidad-de-7-caras" class="nav-link" data-scroll-target="#cuál-es-la-probabilidad-de-7-caras"><span class="header-section-number">2.14.1</span> ¿Cuál es la probabilidad de 7 caras?</a></li>
+  <li><a href="#cuál-es-la-probabilidad-de-obtener-más-de-7-caras" id="toc-cuál-es-la-probabilidad-de-obtener-más-de-7-caras" class="nav-link" data-scroll-target="#cuál-es-la-probabilidad-de-obtener-más-de-7-caras"><span class="header-section-number">2.14.2</span> ¿Cuál es la probabilidad de obtener más de 7 caras?</a></li>
+  <li><a href="#valor-esperado-1" id="toc-valor-esperado-1" class="nav-link" data-scroll-target="#valor-esperado-1"><span class="header-section-number">2.14.3</span> Valor Esperado</a></li>
+  <li><a href="#independencia" id="toc-independencia" class="nav-link" data-scroll-target="#independencia"><span class="header-section-number">2.14.4</span> Independencia</a></li>
+  <li><a href="#ejercicio-11" id="toc-ejercicio-11" class="nav-link" data-scroll-target="#ejercicio-11"><span class="header-section-number">2.14.5</span> Ejercicio 11</a></li>
+  <li><a href="#ejercicio-12" id="toc-ejercicio-12" class="nav-link" data-scroll-target="#ejercicio-12"><span class="header-section-number">2.14.6</span> Ejercicio 12</a></li>
+  <li><a href="#ejercicio-13" id="toc-ejercicio-13" class="nav-link" data-scroll-target="#ejercicio-13"><span class="header-section-number">2.14.7</span> Ejercicio 13</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Números aleatorios y Probabilidad</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>En este capítulo, aprenderá cómo generar muestras aleatorias y medir al azar usando la probabilidad. Trabajara con datos de ventas del mundo real para calcular la probabilidad de que un vendedor tenga éxito. Finalmente, utilizará la distribución binomial para modelar los eventos con resultados binarios.</p>
+<section id="qué-son-las-probabilidades" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="qué-son-las-probabilidades"><span class="header-section-number">2.1</span> ¿Qué son las probabilidades?</h2>
+<p>La gente habla de suerte con bastante frecuencia, como ¿cuales son las posibilidades de cerrar una venta, de que llueva mañana o de ganar un juego? Pero, ¿Cómo medimos exactamente el azar?</p>
+<p>Podemos medir las probabilidades o posibilidades de un evento usando la probabilidad. Podemos calcular la probabilidad de ocurrencia de un evento tomando el número de formas en que el evento puede suceder dividiéndolo por el número total de resultados posibiles.</p>
+<p><span class="math display">\[
+P(Evento) = \frac{\mbox{\# de formas en que puede ocurrir el evento}}{\mbox{\# total de resultados posibles}}
+\]</span></p>
+<p>Por ejemplo, si lanzamos una moneda, puede caer en cara o cruz. Para obtener la probabilidad de que la moneda caiga en cara, dividimos la forma de obtener cara entre los dos resultados posibles, cara y cruz.</p>
+<p><span class="math display">\[
+P(cara) = \frac{\mbox{1 forma de obtener cara}}{\mbox{2 posibles resultados}} = \frac{1}{2} = fbox{50\%}
+\]</span></p>
+<p>La probabilidad siempre está entte cero y 100% por ciento. Si la probabilidad de algo es cero, es imposible, y si la probabilidad de algo es del 100%, ciertamente sucederá.</p>
+<p><img src="fig11.png" class="img-fluid"></p>
+</section>
+<section id="asisgnación-de-vendedores" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="asisgnación-de-vendedores"><span class="header-section-number">2.2</span> Asisgnación de Vendedores</h2>
+<p>Veamos un escenaro más complejo. Se acerca una reunión con un cliente potencial y queremos enviar a alguien del equipo de ventas a la reunión. Pondremos el nombre de cada persona en un boleto en una caja y sacaremos uno al azar para decidir quién va a reunión.</p>
+<p><img src="fig12.png" class="img-fluid"></p>
+<p>El nombre de Brian se saca.</p>
+<p><img src="fig13.png" class="img-fluid"></p>
+<p>La probabilidad de que Brian sea seleccionado es una de cuatro, o 25%. Esto es</p>
+<p><span class="math display">\[
+P(Brian) = \frac{1}{4} = \fbox{25%}
+\]</span></p>
+<section id="muestreo-desde-un-marco-de-datos" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="muestreo-desde-un-marco-de-datos"><span class="header-section-number">2.2.1</span> Muestreo desde un marco de datos</h3>
+<p>Podemos recrear este escenario en R usando la función <code>sample_n</code> de <code>dplyr</code>, que toma un marco de datos y la cantidad de filas que queremos extraer, que es solo 1 en este caso.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sales_counts <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"Amir"</span>, <span class="st">"Brian"</span>, <span class="st">"claire"</span>, <span class="st">"Damian"</span>), <span class="at">n_sales =</span> <span class="fu">c</span>(<span class="dv">178</span>, <span class="dv">126</span>, <span class="dv">75</span>, <span class="dv">69</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sales_counts <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  name n_sales
+1 Amir     178</code></pre>
+</div>
+</div>
+<p>Sin embargo, si ejecutamos lo mismo nuevamente, es posible que obtengamos una fila diferente ya que <code>sample_n</code> elige al azar.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sales_counts <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  name n_sales
+1 Amir     178</code></pre>
+</div>
+</div>
+<p>Si queremos mostrarle al aquipo cómo elegimos a Brian, esto no funcionará bien.</p>
+</section>
+<section id="establecer-una-semilla-aleatoria" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="establecer-una-semilla-aleatoria"><span class="header-section-number">2.2.2</span> Establecer una semilla aleatoria</h3>
+<p>Para asegurarnos de obtener los mismos resultados cuando ejectuamos el script frente al equipo, configuremos la semilla aleatoria usando <code>set.seed()</code>. La semilla es un número que el generador de números aleatorios de R usa como punto de partida, por lo que si lo orientamos con un número semilla, generará el mismo valor aleatorio cada vez. El número en si no importa. Podríamos usar 5,139 o 3 millones. Lo único que importa es que usemos la misma semilla la próxima vez que ejecutemos el script. Ahora, nosotros, o uno de los miembros del equipo de ventas, podemos ejecutar este código una y otra vez y obtener el mismo resultado de Brian cada vez.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sales_counts <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   name n_sales
+1 Brian     126</code></pre>
+</div>
+</div>
+</section>
+<section id="un-segundo-encuentro" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="un-segundo-encuentro"><span class="header-section-number">2.2.3</span> Un segundo encuentro</h3>
+<p>Ahora hay otro cliente potencial que quiere reunirse al mismo tiempo, por lo que debemos elegir a otro vendedor. Brian ya ha sido elegido y no puede estar en dos reuniones a la vez, así que elegiremos entre las tres restantes. A esto se le llama <strong><code>muestro sin reemplazo</code></strong>, ya que no estamos reemplazando el nombre que ya sacamos. Esta vez, se elegi a Claire,</p>
+<p><img src="fig14.png" class="img-fluid"></p>
+<p>y la probabilidad de que estos suceda es una de cada tres, o al rededor del 33%. Esto es,</p>
+<p><span class="math display">\[
+P(Claire) = \frac{1}{3} = \fbox{33%}
+\]</span></p>
+<p>Para recrear esto en R, podemos pasar 2 a sample_b, lo quie nos dará filas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sales_counts <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    name n_sales
+1  Brian     126
+2 claire      75</code></pre>
+</div>
+</div>
+<p>Ahora digamos que las dos reuniones se realizan en diás diferentes, por lo que la misma persona podría asistir a ambas. En este escenario, debemos devolver el nombre de Brian a la caja después de elegirla. Esto se llama <strong><code>muestreo con reemplazo</code></strong>. Claire es elegida para la segunda reunión</p>
+<p><img src="fig15.png" class="img-fluid"></p>
+<p>Pero esta vez, la probabilidad es del 25%.</p>
+<p><span class="math display">\[
+P(Claire) = \frac{1}{4} = \fbox{25%}
+\]</span></p>
+<p>Para hacer esto en R, establezca el argumento de reemplazo de sample_n en <code>TRUE</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>sales_counts <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    name n_sales
+1  Brian     126
+2 claire      75</code></pre>
+</div>
+</div>
+</section>
+<section id="eventos-independientes" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="eventos-independientes"><span class="header-section-number">2.2.4</span> Eventos Independientes</h3>
+<p>Hablemos rapidamente de la independencia. Dos eventos son independientes si la probabilidad del segundo evento no se ve afectada por el resultado del primero. Por ejemplo, si estamos muestreando con reemplazo, la probabilidad que Claire sea elegida en segundo lugar es del 25%, sin importar quien sea elegido primero. En general, al muestrear <code>con reemplazo</code>, cada selección es independiente.</p>
+<p><img src="fig16.png" class="img-fluid"></p>
+<p>De manera similar, los eventos se consideran dependientes cuando el resultado del primero cambia la probabilidad del segundo. Si muestreamos <code>sin reemplazo</code>, la probabilidad de que Claire sea elegida en segundo lugar depende de quién sea elegido primero. Si Claire es elegida primero, hay 0% de probabilidad de que Claire sea elegida en segundo lugar.</p>
+<p><img src="fig17.png" class="img-fluid"></p>
+<p>En general, cuando se muestrea sin reemplazo, cada selección es dependiente.</p>
+<p>El siguiente cuadro comparativo contiene algunos ejemplos sobre muestreo con reemplazo y sin reemplazo.</p>
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Con Reemplazo</th>
+<th>Sin Reemplazo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lanzar una moneda 3 veces</td>
+<td>De una baraja de cartas, repartiendo a 3 jugadores 7 cartas cada un.,</td>
+</tr>
+<tr class="even">
+<td>Tirar un dado dos veces</td>
+<td>Seleccionar al azar 5 productos de la linea de montaje para probar el control de calidad</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Elegir al azar a 3 personas para trabajar el fin de semana de un grupo de 20 personas</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="ejemplo-6" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="ejemplo-6"><span class="header-section-number">2.3</span> Ejemplo 6</h2>
+<p>Suponga que está a cargo del equipo de ventas y es hora de realizar revisiones de desempeño, comenzando con Amir. Como parte de la revisión, desea seleccionar al azar algunas de las ofertas en las que ha trabajado durante el último año para que pueda verlas más a fondo. Antes de comenzar a seleccionar ofertas, primero averiguará cuáles son las probabilidades de seleccionar ciertas ofertas.</p>
+<p>La data que se creo a continuación, contiene la cantidad de tratos en los que Amir trabajo para cada tipo de producto.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>amir_deals <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">product =</span> <span class="fu">c</span>(<span class="st">"Product A"</span>, <span class="st">"Product B"</span>, <span class="st">"Product C"</span>, <span class="st">"Product D"</span>, <span class="st">"Product E"</span>, <span class="st">"Product F"</span>, <span class="st">"Product G"</span>, <span class="st">"Product H"</span>, <span class="st">"Product I"</span>, <span class="st">"Product J"</span>, <span class="st">"Product N"</span>), <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">23</span>, <span class="dv">62</span>, <span class="dv">15</span>, <span class="dv">40</span>, <span class="dv">5</span>, <span class="dv">11</span>, <span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ahora, creamos una nueva columna llamada <code>prob</code> dividiendo <code>n</code> por el número total de tratos en los que trabajó Amir.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>amir_deals <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> n<span class="sc">/</span><span class="fu">sum</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     product  n       prob
+1  Product A 23 0.12921348
+2  Product B 62 0.34831461
+3  Product C 15 0.08426966
+4  Product D 40 0.22471910
+5  Product E  5 0.02808989
+6  Product F 11 0.06179775
+7  Product G  2 0.01123596
+8  Product H  8 0.04494382
+9  Product I  7 0.03932584
+10 Product J  2 0.01123596
+11 Product N  3 0.01685393</code></pre>
+</div>
+</div>
+<p>Si selecciona al azar una de las ofertas de Amir, ¿cuál es la probabilidad de que la oferta involucre el Producto C?</p>
+<p><strong>Respuesta: 8.43%</strong></p>
+</section>
+<section id="distribuciones-discretas" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="distribuciones-discretas"><span class="header-section-number">2.4</span> Distribuciones Discretas</h2>
+<p>En esta lección, profundizaremos en la probabilidad y comenzaremos a observar las distribuciones de probabilidad.</p>
+<p>Consideremos lanzar un dado estándar de seis caras.</p>
+<p><img src="fig18.png" class="img-fluid"></p>
+<p>Hay seis números, o seis resultados posibles, y cada número tiene exactamente una sexta parte, o alrededor de un 17 por ciento de posibilidades de salir. Este es un ejemplo de una distribución de probabilidad.</p>
+<p>Esto es similar al escenario anterior, excepto que teneiamos nombres en lugar de números.</p>
+<p><img src="fig19.png" class="img-fluid"></p>
+<p>Al igual que tirar un dado, cada resultado o nombre tenía la misma probabilidad de ser elegido.</p>
+<section id="distribución-de-probabilidad" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="distribución-de-probabilidad"><span class="header-section-number">2.4.1</span> Distribución de Probabilidad</h3>
+<p><img src="fig20.png" class="img-fluid"></p>
+<p>Una distribución de probabilidad describe la probabilidad de cada resultado posible en un escenario.</p>
+<section id="valor-esperado" class="level4" data-number="2.4.1.1">
+<h4 data-number="2.4.1.1" class="anchored" data-anchor-id="valor-esperado"><span class="header-section-number">2.4.1.1</span> Valor esperado</h4>
+<p>También podemos hablar del valor esperado de una distribución, que es la media de una distribución.</p>
+<p>Podemos calcular esto multiplicando cada valor por su probabilidad y sumando, por lo que el valor esperado de lanzar un dado justo es 3.5. En el caso de los dados sera:</p>
+<p><span class="math display">\[
+(1\times \frac{1}{6}) + (2\times \frac{1}{6}) + (3\times \frac{1}{6}) + (4\times \frac{1}{6}) + (5\times \frac{1}{6}) + (6\times \frac{1}{6}) = \fbox{3.5}
+\]</span></p>
+<p>Podemos visualizar esto usando un gráfico de barras, donde cada barra representa un resultado, y la altura de cada barra representa la probabilidad de ese resultado.</p>
+<p><img src="fig21.png" class="img-fluid"></p>
+</section>
+<section id="probabilidad-área" class="level4" data-number="2.4.1.2">
+<h4 data-number="2.4.1.2" class="anchored" data-anchor-id="probabilidad-área"><span class="header-section-number">2.4.1.2</span> Probabilidad = área</h4>
+<p>Podemos calcular las probabilidades de diferentes resultados tomando áreas de la distribución de probabilidad. Por ejemplo, ¿cuál es la probabilidad de que nuestra tirada sea menor o igual a 2?</p>
+<p><span class="math display">\[
+¿P(\mbox{tirada dado}) \leq 2?
+\]</span></p>
+<p>Para resolver esto, tomaremos el área de cada barra que representa un resultado de 2 o menos. Cada barra tiene un ancho de 1 y una altura de 1/6, por lo que el área de cada barra es un sexto. Sumamos las áreas de 1 y 2 como se muestra en el gráfico para obtener una probabilidad total de <span class="math inline">\(1/3\)</span>.</p>
+<p><img src="fig22.png" class="img-fluid"></p>
+</section>
+<section id="dado-desigual" class="level4" data-number="2.4.1.3">
+<h4 data-number="2.4.1.3" class="anchored" data-anchor-id="dado-desigual"><span class="header-section-number">2.4.1.3</span> Dado desigual</h4>
+<p><img src="fig23.png" class="img-fluid"></p>
+<p>Ahora digamos que tenemos un dado donde los dos se convirtieron en tres. Esto significa que ahora tenemos un 0% de posibilidades de obtener un 2 y un 33% de posibilidad de obtener un 3. Matemáticamente esto es</p>
+<p><span class="math display">\[
+(1\times 1/6) + (1\times 0) + (3\times 1/3) + (4\times 1/6) + (5\times 1/6) + (6\times 1/6) = \fbox{3.67}
+\]</span></p>
+<p>ya que es imposible obtener un 2 y un 3 por su nueva probabilidad, un tercio. Esto nos da un valor esperado que es ligeramente más alto que el dado justo.</p>
+</section>
+</section>
+<section id="visualización-de-probabilidades-desiguales" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="visualización-de-probabilidades-desiguales"><span class="header-section-number">2.4.2</span> Visualización de Probabilidades desiguales</h3>
+<p><img src="fig24.png" class="img-fluid"></p>
+<p>Cuando visualizamos estas nuevas probabilidades, las barras ya no son pares. Con este dado, ¿cuál es la probabilidad de obtener algo menor o igual a 2?, es decir</p>
+<p><span class="math display">\[
+P(dado desigual) \leq 2 = ?
+\]</span></p>
+<p><img src="fig25.png" class="img-fluid"></p>
+<p>Hay un sexto de probabilidad de obtener 1 y cero probabilidad de obtener 2, que suma un sexto, tal como puede ver en la figura previa.</p>
+<p>Las distribuciones de probabilidad que ha visto hasta ahora son discretas, ya que representan situaciones con resultados discretos. Recuerde del capítulo anterior que las variables discretas pueden considerarse como variables contables o contadas. En el caso de un dado, estamos contando puntos, por lo que no podemos sacar 1.5 o 4.3.</p>
+<p><img src="fig26.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="distribución-uniforme" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="distribución-uniforme"><span class="header-section-number">2.5</span> Distribución Uniforme</h2>
+<p>Cuando todos los resultados tienen la misma probabilidad, como un dado justo, se trata de una distribución especial denominada <code>distribución uniforme discreta.</code></p>
+</section>
+<section id="muestreo-a-partir-de-distribuciones-discretas" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="muestreo-a-partir-de-distribuciones-discretas"><span class="header-section-number">2.6</span> Muestreo a partir de distribuciones discretas</h2>
+<p>Al igual que tomamos muestras de nombres de una caja, podemos hacer lo mismo con distribuciones de probabilidad como las que hemos visto. Aquí hay un marco de datos llamado dado que representa un dado justo y su valor esperado es 3.5.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dado <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">n =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(dado<span class="sc">$</span>n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.5</code></pre>
+</div>
+</div>
+<p>Tomaremos muestras de él 10 veces para simular 10 rollos. Tenga en cuenta que muestreamos con reemplazo para que estemos muestreando de la misma distribución cada vez.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rolls_10 <span class="ot">&lt;-</span> dado <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>rolls_10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   n
+1  3
+2  3
+3  3
+4  4
+5  3
+6  6
+7  5
+8  2
+9  3
+10 6</code></pre>
+</div>
+</div>
+<section id="visualización-de-la-muestra" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="visualización-de-la-muestra"><span class="header-section-number">2.6.1</span> Visualización de la muestra</h3>
+<p>Podemos visualizar los resultados de los diez lanzamientos usando un histograma, estableciendo el número de contenedores en 6 ya que hay 6 resultados posibles.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rolls_10, <span class="fu">aes</span>(n)) <span class="sc">+</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="summary_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="distribución-muestral-vs-distribución-teórica" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="distribución-muestral-vs-distribución-teórica"><span class="header-section-number">2.7</span> Distribución muestral vs distribución teórica</h2>
+<p>Observe que tenemos diferentes números de 1,2,3, etc., ya que la muestra fue aleatoria, aunque cada tirada teníamos la misma probabilidad de sacar cada una.</p>
+<p>La media de nuestra muestra es de 3.3, que no esta tan cerca del 3.5 que esperabamos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(rolls_10<span class="sc">$</span>n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.8</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(dado<span class="sc">$</span>n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.5</code></pre>
+</div>
+</div>
+<section id="una-muestra-más-grande" class="level3" data-number="2.7.1">
+<h3 data-number="2.7.1" class="anchored" data-anchor-id="una-muestra-más-grande"><span class="header-section-number">2.7.1</span> Una muestra más grande</h3>
+<p>Si lanzamos el dado 100 veces, la distribución de las tiradas se ve un poco más uniforme y la media esta más cerca de 3.5</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>rolls_100 <span class="ot">&lt;-</span> dado <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(rolls_100<span class="sc">$</span>n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.52</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rolls_100, <span class="fu">aes</span>(n)) <span class="sc">+</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="summary_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="ley-de-los-grandes-números" class="level3" data-number="2.7.2">
+<h3 data-number="2.7.2" class="anchored" data-anchor-id="ley-de-los-grandes-números"><span class="header-section-number">2.7.2</span> Ley de los grandes números</h3>
+<p>Esto se llama la ley de los grandes números, que es la idea de que a medida que aumenta el tamaño de la muestra, la media de la muestra se acercará a la ,media teórica.</p>
+</section>
+</section>
+<section id="ejercicio-7" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="ejercicio-7"><span class="header-section-number">2.8</span> Ejercicio 7</h2>
+<p>En este ejercicio vamos a crear una distribución de probabilidad.</p>
+<p>Suponga que un nuevo restaurante abrió hace unos meses y la gerencia del restaurante quiere optimizar su espacio para sentarse en función del tamaño de los grupos que vienen con más frecuencia. En una noche, hay 10 grupos de personas esperando para sentarse en el restaurante, pero en lugar de ser llamados en el orden que llegaron, serán llamados al azar. Creemos hipoteticamente nuestra data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>restaurant_groups <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">group_id =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>, <span class="st">"F"</span>, <span class="st">"G"</span>, <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"J"</span>), <span class="at">group_size =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>En este ejercicio, investigará la probabilidad de que grupos de diferentes tamaños de cada uno de los diez grupos están contenidos en el marco de datos <code>restaurant_groups</code>.</p>
+<p>Primero cree un histograma de la columna <code>group_size</code> de <code>restaurant_groups</code>, estableciendo el número de contenedores en 5.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(restaurant_groups, <span class="fu">aes</span>(group_size)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="summary_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Ahora, cuente el número de cada uno de los <code>group_size</code> en <code>restaurant_groups</code>, luego agregue una columna llamada <code>probability</code> que contiene la probabilidad de seleccionar aleatoriamente un grupo de cada tamaño. Almacene esto en un nuevo marco de datos llamado <code>size_distribution</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>size_distribution <span class="ot">&lt;-</span>restaurant_groups <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># contamos el número de cada tamaño de grupo</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(group_size) <span class="sc">%&gt;%</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculamos las probabilidades</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">probability =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n))</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>size_distribution</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  group_size n probability
+1          2 6         0.6
+2          3 1         0.1
+3          4 2         0.2
+4          6 1         0.1</code></pre>
+</div>
+</div>
+<p>Ahora, dado que ya tenemos las probabilidades, estamos listos para calcular el valor esperado de <code>size_distribution</code>, que representa el tamaño esperado del grupo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>expected_val <span class="ot">&lt;-</span> <span class="fu">sum</span>(size_distribution<span class="sc">$</span>group_size <span class="sc">*</span> size_distribution<span class="sc">$</span>probability)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>expected_val</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.9</code></pre>
+</div>
+</div>
+<p>Por último, calculamos la probabilidad de elegir aleatoriamente un grupo de 4 o más personas filtrando y resumiendo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>size_distribution <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filtramos para grupos de 4 o mas </span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group_size <span class="sc">&gt;=</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculamos la prob_4_o_mas tomando la suma de probabilidades</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">prob_4_or_more =</span> <span class="fu">sum</span>(probability))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  prob_4_or_more
+1            0.3</code></pre>
+</div>
+</div>
+<section id="indentificación-de-distribuciones" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="indentificación-de-distribuciones"><span class="header-section-number">2.8.1</span> Indentificación de distribuciones</h3>
+<p>¿Qué muestra es más probable que se haya tomado de una distribución uniforme?</p>
+<p><img src="fig27.png" class="img-fluid"></p>
+<p><strong>Respuesta: Opción B</strong></p>
+</section>
+</section>
+<section id="distribuciones-continuas" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="distribuciones-continuas"><span class="header-section-number">2.9</span> Distribuciones Continuas</h2>
+<p>Podemos usar distribuciones discretas para modelar situaciones que involucran variables discretas o contables, pero ¿cómo podemos modelas variables continuas?</p>
+<p>Comencemos con un ejemplo.</p>
+<p><img src="fig28.png" class="img-fluid"></p>
+<p>El autobús de la ciudad llega cada doce minutos, por lo que si te presentas a una hora aleatoria, que podrías esperar desde 0 minutos si llegas justo cuando llega el autobús, hasta 12 minutos si llegas cuando el autobus sale.</p>
+<section id="distribución-uniforme-continua" class="level3" data-number="2.9.1">
+<h3 data-number="2.9.1" class="anchored" data-anchor-id="distribución-uniforme-continua"><span class="header-section-number">2.9.1</span> Distribución uniforme continua</h3>
+<p><img src="fig29.png" class="img-fluid"></p>
+<p>Modelemos este escenario con una distribución de probabilidad. Hay una cantidad infinita de minutos que podríamos esperar, ya que podríamos esperar 1 minuto, 1.5 minutos, 1.53 minutos, etc., por lo que no podemos crear bloques individuales como la hariamos con una variable discreta.</p>
+<p>En cambio, usaremos una línea continua para representar la probabilidad. La linea es plana ya que existe la misma probabilidad de esperar cualquier tiempo de 0 a 12 minutos. Esto se llama la <code>distribución uniforme continua.</code></p>
+<p><img src="fig30.png" class="img-fluid"></p>
+<p>Ahora que tenemos nuestra distribución, averiguemos cual es la probabilidad de que esperemos entre 4 y 7 minutos. Al igual que con las distribuciones discretas , podemos tomar el área de 4 a 7 para calcular la probabilidad.</p>
+<p><span class="math display">\[
+P(4\leq \mbox{tiempo de espera} \leq 7) = ?
+\]</span></p>
+<p><img src="fig31.png" class="img-fluid"></p>
+<p>Al igual que con las distribuciones discretas, podemos tomar el área de 4 a 7 para calcular la probabilidad.</p>
+<p><img src="fig32.png" class="img-fluid"></p>
+<p>El ancho de este rectángulo es 7 menos 4 que es 3. La altura es 1/12, entonces</p>
+<p><span class="math display">\[
+P(4\leq \mbox{tiempo espera}\leq 7) = 3\times \frac{1}{12} = \frac{1}{4} = \fbox{25\%}
+\]</span></p>
+</section>
+<section id="distribución-uniforme-en-r" class="level3" data-number="2.9.2">
+<h3 data-number="2.9.2" class="anchored" data-anchor-id="distribución-uniforme-en-r"><span class="header-section-number">2.9.2</span> Distribución Uniforme en R</h3>
+<p>Usemos la distribución uniforme en R para calcular la probabilidad de esperar 7 minutos o menos. Pasaremos 7 a <code>punif</code> función que nos ayuda a calcular la probabilidad uniforme en R. Veamos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">punif</span>(<span class="dv">7</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5833333</code></pre>
+</div>
+</div>
+<p>Por tanto, la probabilidad de esperar menos de 7 minutos es del <span class="math inline">\(\fbox{58\%}\)</span>.</p>
+</section>
+<section id="cola-inferior" class="level3" data-number="2.9.3">
+<h3 data-number="2.9.3" class="anchored" data-anchor-id="cola-inferior"><span class="header-section-number">2.9.3</span> Cola Inferior</h3>
+<p>Si queremos la probabilidad de esperar más de 7 minutos,</p>
+<p><span class="math display">\[P(\mbox{tiempo de espera} \geq 7) = ?\]</span>establezca el argumento de cola de punto inferior en FALSO.</p>
+<p><img src="fig33.png" class="img-fluid"></p>
+<p>En R esto es:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">punif</span>(<span class="dv">7</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">12</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4166667</code></pre>
+</div>
+</div>
+<p>Pero, ¿cómo calculamos la probabilidad de esperar de 4 a 7 minutos usando R?</p>
+<p><img src="fig34.png" class="img-fluid"></p>
+<p>Podemos empezar con la probabilidad de esperar menos de 7 minutos, luego reste la probabilidad de esperar menos de 4 minutos, tal como puede apreciar en la figura. En R esto es:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">punif</span>(<span class="dv">7</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">12</span>) <span class="sc">-</span> <span class="fu">punif</span>(<span class="dv">4</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.25</code></pre>
+</div>
+</div>
+<p>Para calcular la probabilidad de esperar entre 0 y 12 minutos</p>
+<p><span class="math display">\[
+P(0\leq \mbox{tiempo de espera}\leq 12) = ?
+\]</span></p>
+<p>Graficamente esto es</p>
+<p><img src="fig35.png" class="img-fluid"></p>
+<p>Por tanto, no es mas que multiplicar 12 por 1/2, es decir:</p>
+<p><span class="math display">\[
+P(0\leq \mbox{tiempo de espera}\leq 12) = 12\times \frac{1}{12} = \fbox{1}
+\]</span></p>
+<p>Esto tiene sentido ya que estamos eguros que esperaremos entre 0 y 12 minutos.</p>
+</section>
+<section id="otras-distribuciones-continuas" class="level3" data-number="2.9.4">
+<h3 data-number="2.9.4" class="anchored" data-anchor-id="otras-distribuciones-continuas"><span class="header-section-number">2.9.4</span> Otras Distribuciones Continuas</h3>
+<p><img src="fig36.png" class="img-fluid"></p>
+<p>Las distribuciones continuas pueden tomar formas distintas a las uniformes donde algunos valores tienen una probabilidad mayor que otros. No importa la forma de la distribución, el área debajo de ella siempre debe de ser igual a 1.</p>
+<p><img src="fig37.png" class="img-fluid"></p>
+<p>Esto también se aplicará a otras distribuciones que aprenderemos más adelante en este curso, como la distribución normal o distribución de Poisson, que se puede usar para modelar muchas situaciones de la vida real.</p>
+<p><img src="fig38.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="ejercicio-8" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="ejercicio-8"><span class="header-section-number">2.10</span> Ejercicio 8</h2>
+<p>En este punto, ha aprendido acerca de las dos variantes diferentes de la distribución uniforme: la distribución uniforme discreta y la distribución uniforme continua. en este ejercicio, decidirá qué situaciones siguen qué distribución.</p>
+<p><img src="fig39.png" class="img-fluid"></p>
+<p>Asignaremos cada situación a la distribución de probabilidad con la que se modelaría mejor.</p>
+<table class="table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 56%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Uniforme discreto</th>
+<th>Uniforme continuo</th>
+<th>Otro</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>El número de boleto de un ganador de la rifa, suponiendo que haya un boleto para cada número del 1 al 100.</td>
+<td>La hora del día en que nacerá un bebé.</td>
+<td>La altura de una persona al azar.</td>
+</tr>
+<tr class="even">
+<td>El resultado de lanzar un dado de 4 caras.</td>
+<td>El tiempo que tendrás que esperar para que un géiser entre en erupción si te presentas en un momento aleatorio, sabiendo que el géiser entra en erupción exactamente cada diez minutos.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ejercicio-9" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="ejercicio-9"><span class="header-section-number">2.11</span> Ejercicio 9</h2>
+<p>El software de ventas utilizado en su empresa está configurado para realizar copias de seguridad automaáicamente, pero nadie sabe exactamente a qué hora se realizan las copias de seguridad. Sin embargo, se sabe que las copias de seguridad se realizan exactamente cada 30 minutos. Amir regresa de las reuniones de ventas en momentos aleatorios para actualizar los datos del cliente con el que acaba de reunirse. Quiere saber cuánto tiempo tendrá que esperar para que realice una copia de seguridad de sus datos recién ingresados. Usando nuestro nuevo conocimiento de distribuciones uniformes continuas para modelar esta situación y responder las preguntas de Amir.</p>
+<ul>
+<li><p>Primero, para modelar cuánto tiempo esperará Amir por una copia de seguridad utilizando una distribución uniforme continua, guarde su tiempo de espera más bajo posible como <code>min</code> y su tiempo de espera más alto posible como <code>max</code>. Recuerde que las copias de seguridad se realizan cada 30 minutos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tiempos de espera mínimos y máximos para la copia de seguridad que se realiza cada 30 minutos</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>min <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>max <span class="ot">&lt;-</span> <span class="dv">30</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Calculemos la probabilidad de que Amir tenga que esperar menos menos de 5 minutos y guárdala en una nueva variable llamada <code>prob_less_than_5</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>prob_less_than_5 <span class="ot">&lt;-</span> <span class="fu">punif</span>(<span class="dv">5</span>, <span class="at">min =</span> min, <span class="at">max =</span> max)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>prob_less_than_5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1666667</code></pre>
+</div>
+</div></li>
+<li><p>Ahora, calculemos la probabilidad de que Amir tenga que esperar más de 5 minutos y guárdala en una variable llamada <code>prob_greater_than_5</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>prob_greater_than_5 <span class="ot">&lt;-</span> <span class="fu">punif</span>(<span class="dv">30</span>, <span class="at">min =</span> min, <span class="at">max=</span> max)<span class="sc">-</span> <span class="fu">punif</span>(<span class="dv">5</span>, <span class="at">min =</span> min, <span class="at">max =</span> max)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>prob_greater_than_5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8333333</code></pre>
+</div>
+</div></li>
+<li><p>Por último calcule la probabilidad de que Amir tenga que esperar entre 10 y 20 minutos, y guárdala en una nueva variable llamada <code>prob_between_10_end_20</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>prob_between_10_and_20 <span class="ot">&lt;-</span> <span class="fu">punif</span>(<span class="dv">20</span>, <span class="at">min =</span> min, <span class="at">max =</span> max) <span class="sc">-</span> <span class="fu">punif</span>(<span class="dv">10</span>, <span class="at">min =</span> min, <span class="at">max =</span> max)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>prob_between_10_and_20</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3333333</code></pre>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="ejercicio-10" class="level2" data-number="2.12">
+<h2 data-number="2.12" class="anchored" data-anchor-id="ejercicio-10"><span class="header-section-number">2.12</span> Ejercicio 10</h2>
+<p>Para darle a Amir una mejor idea de cuánto tiempo tendrá que esperar, simularemos la esperá de Amir 1000 veces y creará un histograma para mostrarle lo que debe esperar. Recuerde del último ejercicio que su tiempo de espera mínimo es de 0 minutos y su tiempo de espera máximo es de 30 minutos.</p>
+<p>Creemos un marcos de datos llamado <code>wait_times</code> y establezcamos un valor semilla de 334.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">334</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>wait_times <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">simulation_nb =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)))</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wait_times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  simulation_nb
+1             1
+2             2
+3             3
+4             4
+5             5
+6             6</code></pre>
+</div>
+</div>
+<p>Ahora, generamos 1000 tiempos de espera a partir de la distribución uniforme continua que modela el tiempo de espera de Amir. Agregue esto como una nueva columna llamada <code>time</code> en el marco de datos <code>wait_times</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>wait_times_1000 <span class="ot">&lt;-</span> wait_times <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">runif</span>(<span class="dv">1000</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">30</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Luego, creamos el histograma de los tiempos de espera simulados con 30 contenedores.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>wait_times_1000 <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">runif</span>(<span class="dv">1000</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">30</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time)) <span class="sc">+</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="summary_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Excelente simulación! A menos que Amir descubra exactamente a qué hora ocurre cada copia de seguridad, no podrá programar la entrada de datos para que se haga una copia de seguridad antes, pero parece que esperará unos 15 minutos en promedio.</p>
+</section>
+<section id="distribución-binomial" class="level2" data-number="2.13">
+<h2 data-number="2.13" class="anchored" data-anchor-id="distribución-binomial"><span class="header-section-number">2.13</span> Distribución Binomial</h2>
+<p>Es hora de ampliar aún más su caja de herramientas de distribuciones. En este sección, aprenderá sobre la distribución bonomial.</p>
+<section id="lanzamiento-de-monedas" class="level3" data-number="2.13.1">
+<h3 data-number="2.13.1" class="anchored" data-anchor-id="lanzamiento-de-monedas"><span class="header-section-number">2.13.1</span> Lanzamiento de monedas</h3>
+<p><img src="fig40.png" class="img-fluid"></p>
+<p>Comenzaremos lanzando una moneda, que tiene dos resultados posibles, cara o cruz, cada uno con una probabilidad del 50%.</p>
+</section>
+<section id="resultados-binarios" class="level3" data-number="2.13.2">
+<h3 data-number="2.13.2" class="anchored" data-anchor-id="resultados-binarios"><span class="header-section-number">2.13.2</span> Resultados Binarios</h3>
+<p><img src="fig41.png" class="img-fluid"></p>
+<p>Este es un ejemplo de un resultado binario, o un resultado con dos valores prosibles. También podríamos respresentar estos resultados como un <code>1</code> y un <code>0</code>, un éxito o un fracaso, y una victoria o una derrota.</p>
+<p>En <code>R</code>, podemos simular esto usando la función <code>rbinom</code>, que toma en cuenta la cantidad de intentos o veces que queremos lanzar, la cantidad de monedas que queremos lanzar y la probabilidad de cara o éxito. Esto devolverá un 1 que contaremos como cara o un 0 que contaremos como cruz. Podemos usar</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p>Para realizar ocho lanzamientos de moneda, podemos cambiar el primer argumento un 8, lo que nos dará ocho lanzamientos de una moneda con un 50% de prosibilidades de cara. Esto nos da un conjunto de 8 unos y ceros.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">8</span>, <span class="dv">1</span>, <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0 0 0 0 0 0 0 1</code></pre>
+</div>
+</div>
+</section>
+<section id="muchas-volteretas-una-vez" class="level3" data-number="2.13.3">
+<h3 data-number="2.13.3" class="anchored" data-anchor-id="muchas-volteretas-una-vez"><span class="header-section-number">2.13.3</span> Muchas volteretas una vez</h3>
+<p>Si intercambiamos los dos primeros argumentos, simulamos un lanzamiento de 8 monedas. Esto nos da un número, que es el número total de caras o éxitos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="dv">8</span>, <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+</section>
+<section id="muchas-volteretas-muchas-veces" class="level3" data-number="2.13.4">
+<h3 data-number="2.13.4" class="anchored" data-anchor-id="muchas-volteretas-muchas-veces"><span class="header-section-number">2.13.4</span> Muchas volteretas muchas veces</h3>
+<p>De manera similar, podemos pasar 10 y 3 a rbinom para simular 10 lanzamientos de 3 monedas. Esto devuelve 10 números, cada uno de los cuales representa el número total de caras de cada conjunto de lanzamientos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">10</span>, <span class="dv">3</span>, <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0 0 2 2 2 1 3 1 1 1</code></pre>
+</div>
+</div>
+</section>
+<section id="otras-probabilidades" class="level3" data-number="2.13.5">
+<h3 data-number="2.13.5" class="anchored" data-anchor-id="otras-probabilidades"><span class="header-section-number">2.13.5</span> Otras probabilidades</h3>
+<p>También podríamos tener una moneda que sea más pesada en un lado que en el otro, por lo que la probabilidad de obtener cara es solo del 25%.</p>
+<p><img src="fig42.png" class="img-fluid"></p>
+<p>Para simular lanzamientos con esta moneda, ajustaremos el tercer argumento de rbinom a 0.25. El resultado tiene números más bajos, ya que no es tan probable obtener varias caras con la nueva moneda.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">10</span>, <span class="dv">3</span>, <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1 1 0 0 0 0 1 1 1 2</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="distribución-binomial-1" class="level2" data-number="2.14">
+<h2 data-number="2.14" class="anchored" data-anchor-id="distribución-binomial-1"><span class="header-section-number">2.14</span> Distribución Binomial</h2>
+<p>La distribución binomial describle la probabilidad del número de éxitos en una secuencia de ensayos independientes. En otras palabras, puede decirnos la probabilidad de obtener cierto número de caras en una secuencia de lanzamientos de monedas. Tenga en cuenta que esta es una distribución discreta ya que estamos trabajando con un resultado contable. La distribución binomial se puede describir usando dos paramétros <code>n</code> y <code>p</code>.</p>
+<ul>
+<li><p><code>n</code> representa el número total de ensayos que se están realizando.</p></li>
+<li><p><code>p</code> representa la probabilidad de los ensayos</p></li>
+<li><p><code>n</code> y <code>p</code> son también el segundo y tercer argumento de <code>rbinom</code>.</p></li>
+</ul>
+<p>Así es como se ve la distribución de 10 monedas. Tenemos la mayor probabilidad de obtener 5 caras en total, y una posibilidad mucho menor de obtener 0 caras o 10 caras.</p>
+<p><img src="fig43.png" class="img-fluid"></p>
+<section id="cuál-es-la-probabilidad-de-7-caras" class="level3" data-number="2.14.1">
+<h3 data-number="2.14.1" class="anchored" data-anchor-id="cuál-es-la-probabilidad-de-7-caras"><span class="header-section-number">2.14.1</span> ¿Cuál es la probabilidad de 7 caras?</h3>
+<p><span class="math display">\[
+P(caras = 7)?
+\]</span></p>
+<p>Para obtener la probabilidad de obtener 7 caras de 10 monedas, podemos usar <code>dbinom()</code>.</p>
+<ul>
+<li><p>El primer argumento es el número de caras o éxitos.</p></li>
+<li><p>El segundo argumento es el número de intentos, n, y</p></li>
+<li><p>El tercer agumento es la probabilidad de éxito p</p></li>
+</ul>
+<p>Si lanzamos 10 monedas, hay un 12% de probabilidad de que 7 de ellas sean cara.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="dv">7</span>, <span class="dv">10</span>, <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1171875</code></pre>
+</div>
+</div>
+</section>
+<section id="cuál-es-la-probabilidad-de-obtener-más-de-7-caras" class="level3" data-number="2.14.2">
+<h3 data-number="2.14.2" class="anchored" data-anchor-id="cuál-es-la-probabilidad-de-obtener-más-de-7-caras"><span class="header-section-number">2.14.2</span> ¿Cuál es la probabilidad de obtener más de 7 caras?</h3>
+<p><span class="math display">\[
+P(cara &gt; 7)?
+\]</span></p>
+<p>Podemos usar el argumento de cola de punto inferior para obtener la probabilidad de un número de éxitos mayor que el primer argumento. Tenga en cuenta que esto es lo mismo que 1 menos la misma llamada <code>pbinom</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">7</span>, <span class="dv">10</span>, <span class="fl">0.5</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0546875</code></pre>
+</div>
+</div>
+</section>
+<section id="valor-esperado-1" class="level3" data-number="2.14.3">
+<h3 data-number="2.14.3" class="anchored" data-anchor-id="valor-esperado-1"><span class="header-section-number">2.14.3</span> Valor Esperado</h3>
+<p>El valor esperado de la distribución binomial se puede calcular multiplicando <code>n</code> por el <code>p</code>.</p>
+<p><span class="math display">\[
+\bar{x}= n\times p
+\]</span></p>
+<p>El número esperado de caras que obtendremos al lanzar 10 monedas es 10 veces 0.5 que es 5.</p>
+<p><span class="math display">\[
+\bar{x} = 10\times 0.5 = \fbox{5}
+\]</span></p>
+</section>
+<section id="independencia" class="level3" data-number="2.14.4">
+<h3 data-number="2.14.4" class="anchored" data-anchor-id="independencia"><span class="header-section-number">2.14.4</span> Independencia</h3>
+<p>Es importante recordar que para que se aplique la distribución binomial, cada ensayo debe ser independiente, por lo que el resultado de un ensayo no debería afectar al siguiente. Por ejemplo, si elegimos al azar de estas tarjetas con ceros y unos</p>
+<p><img src="fig44.png" class="img-fluid"></p>
+<p>Tenemos una probabilidad de 50 - 50 de obtener un 0 un 1.</p>
+<p>Pero como estamos muestreando sin reemplazo, las probabilidades para la segunda prueba son diferentes debido al resultado de la primera prueba.</p>
+<p><img src="fig45.png" class="img-fluid"></p>
+<p>Dado que estos ensayos no son independientes, no podemos calcular probabilidades precisas para esta situación utilizando la distribución binomial.</p>
+</section>
+<section id="ejercicio-11" class="level3" data-number="2.14.5">
+<h3 data-number="2.14.5" class="anchored" data-anchor-id="ejercicio-11"><span class="header-section-number">2.14.5</span> Ejercicio 11</h3>
+<p>Suponga que Amir generalmente trabaja en 3 tratos por semana y, en general, gana eñ 30% de los tratos en los que trabaja. Cada trato tiene un resultado binario: se <em>pierde</em> o se <em>gana</em>, por lo que puede modelar sus tratos de ventas con una distribución binomial. En este ejercicio, ayudará a Amir a simular un año de sus transacciones para que pueda comprender mejor su desempeño.</p>
+<ul>
+<li><p>Primero, establezca una semilla aleatoria en 10 y simule un solo trato.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div></li>
+<li><p>Ahora, simule una semana típica de ofertas de Amir, o una semana de 3 ofertas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div></li>
+<li><p>Por último, simule un año de ofertas de Amir, o 52 semanas de 3 ofertas cada una, y guárdelas en formato <code>deals</code>. Calcule el número medio de tratos que ganó por semana.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>deals <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">52</span>, <span class="dv">3</span>, <span class="fl">0.3</span>)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(deals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8076923</code></pre>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="ejercicio-12" class="level3" data-number="2.14.6">
+<h3 data-number="2.14.6" class="anchored" data-anchor-id="ejercicio-12"><span class="header-section-number">2.14.6</span> Ejercicio 12</h3>
+<p>Al igual que en el último ejercicio, suponga que A,mir gana el 30% de los tratos. Quiere tener una idea de la probabilidad de que cierre una cierta cantidad de tratos cada semana. En este ejercicio, calculará cuáles son las probabilidades de que cierre diferentes números de tratos utilizando la distribución binomial.</p>
+<ul>
+<li><p>Primero, cuál es la probabilidad de que Amir cierre los 3 tratos en una semana?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aquí utilizamos la función de dbinom() puesto que queremos sacar una sola probabilidad de masa, es decir 3 tratos en una semana </span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.027</code></pre>
+</div>
+</div>
+<p>Esto nos dice que de 3 ensayos que hacemos queremos ver las probabilidad de que esto ocurra el 100% de las veces, es decir, 3, teniendo en cuenta que la probabilidad de exito es del 30%.</p></li>
+<li><p>¿cuál es la probabilidad de que Amir cierre 1 trato o menos en una semana?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sin embargo, en este caso, queremos sacar más probabilidades que en el caso anterior, es decir, antes solamente calculabamos la probabilidad de saldar 3 tratos en 1 semana, es decir una solo caso. </span></span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.784</code></pre>
+</div>
+</div>
+<p>Dicho de otra manera, queremos saber cual es la probabilidad de que el éxito, ocurra una vez en 3, teniendo en cuenta que la probabilidad es del 30%.</p></li>
+<li><p>¿Cuál es la probabilidad de que Amir cierre más de 1 trato?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="fl">0.3</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.216</code></pre>
+</div>
+</div>
+<p>Lo que estamos viendo en este caso, es ver cual es la probabilidad de tener por lo menos, 1 éxito, o más 2 o incluso 3, de tres ensayos.</p></li>
+</ul>
+</section>
+<section id="ejercicio-13" class="level3" data-number="2.14.7">
+<h3 data-number="2.14.7" class="anchored" data-anchor-id="ejercicio-13"><span class="header-section-number">2.14.7</span> Ejercicio 13</h3>
+<p>Ahora amir quiere saber cuántos tratos puede esperar cerrar cada semana si cambia su tasa de ganancias. Afortunadamente, puede usar su conocimiento de distribución binomial para ayudarlo a calcular el valor esperado en diferentes situaciones.</p>
+<ul>
+<li><p>Primero, calcule el número esperado de ventas de las 3 en las que trabaja que Amir ganará cada semana si mantiene su tasa de ganancia del 30%.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>won_30pct <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> <span class="fl">0.3</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>won_30pct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9</code></pre>
+</div>
+</div></li>
+<li><p>Segundo, calcule el número esperado de ventas de las 3 en las que trabaja que ganará si su tasa de ganancias cae al 25%.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>won_25pct <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span><span class="fl">0.25</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>won_25pct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.75</code></pre>
+</div>
+</div></li>
+<li><p>Tercero, calcule la cantidad esperada de ventas de las 3 en las que trabaja que ganará si su tasa de ganancias aumenta al 35%.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>won_35pct <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> <span class="fl">0.35</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>won_35pct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.05</code></pre>
+</div>
+</div></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./intro.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Summary (resumen) Estadística</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Teorema_LC.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Más Distribuciones y el Teorema del Límite Central</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
