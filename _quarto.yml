@@ -1,0 +1,27 @@
+project:
+  type: book
+  output-dir: docs
+
+
+book:
+  title: "Fundamentos Estadísticos con R"
+  author: "Lic. Juan Isaula"
+  date: "16/7/2023"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - summary.qmd
+    - Teorema_LC.qmd
+    - correlacion_de.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+
